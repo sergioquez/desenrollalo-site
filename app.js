@@ -7,10 +7,30 @@ const resetBtn = document.querySelector('.timer-controls .reset');
 let timerInterval;
 let elapsedSeconds = 0;
 
-function startTimer() {
+const DEVELOPMENT_TIMES = {
+  '35mm': {
+    'c41': 15,
+    'd76': 10
+  },
+  '120mm': {
+    'c41': 20,
+    'd76': 12
+  }
+};
+
+function calculateDevelopmentTime(filmType, developer, rolls) {
+  const developmentTime = DEVELOPMENT_TIMES[filmType][developer];
+  return developmentTime * rolls;
+}
+
+function startTimer(totalDevelopmentTime) {
   timerInterval = setInterval(() => {
     elapsedSeconds++;
     updateTimerDisplay();
+    if (elapsedSeconds >= totalDevelopmentTime) {
+      stopTimer();
+      playAlertSound();
+    }
   }, 1000);
 }
 
