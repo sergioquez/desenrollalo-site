@@ -18,6 +18,7 @@ const developerSelect = document.getElementById('developer');
 const rollsInput = document.getElementById('rolls');
 const calculateBtn = document.querySelector('.calculator button.calculate');
 const resultDiv = document.querySelector('.calculator .result');
+const progressBar = document.querySelector('.timer .progress-bar');
 
 const timerDisplay = document.querySelector('.timer-display');
 const startBtn = document.querySelector('.timer-controls .start');
@@ -45,9 +46,12 @@ function startTimer(totalDevelopmentTime) {
   timerInterval = setInterval(() => {
     elapsedSeconds++;
     updateTimerDisplay();
+    updateProgressBar(elapsedSeconds, totalDevelopmentTime);
     if (elapsedSeconds >= totalDevelopmentTime) {
       stopTimer();
       playAlertSound();
+      showDevelopmentCompleteNotification();
+      addCalendarEvent(totalDevelopmentTime);
     }
   }, 1000);
 }
@@ -60,12 +64,18 @@ function resetTimer() {
   stopTimer();
   elapsedSeconds = 0;
   updateTimerDisplay();
+  updateProgressBar(0, 0);
 }
 
 function updateTimerDisplay() {
   const minutes = Math.floor(elapsedSeconds / 60).toString().padStart(2, '0');
   const seconds = (elapsedSeconds % 60).toString().padStart(2, '0');
   timerDisplay.textContent = `${minutes}:${seconds}`;
+}
+
+function updateProgressBar(currentTime, totalTime) {
+  const progress = (currentTime / totalTime) * 100;
+  progressBar.style.width = `${progress}%`;
 }
 
 function calculateDevelopmentTime(filmType, developer, rolls) {
@@ -76,6 +86,25 @@ function calculateDevelopmentTime(filmType, developer, rolls) {
 function playAlertSound() {
   if (alertsEnabled) {
     alertSound.play();
+  }
+}
+
+function showDevelopmentCompleteNotification() {
+  alert('¡Revelado terminado! Es hora de pasar a la siguiente etapa.');
+}
+
+function addCalendarEvent(totalDevelopmentTime) {
+  const event = {
+    title: 'Revelar película',
+    start: new Date().toISOString(),
+    end: new Date(new Date().getTime() + totalDevelopmentTime * 1000).toISOString()
+  };
+
+  if (navigator.calendar) {
+    navigator.calendar.createEvent(event);
+    alert('Se ha agregado un evento al calendario.');
+  } else {
+    alert('No se pudo agregar el evento al calendario.');
   }
 }
 
