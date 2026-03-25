@@ -33,3 +33,53 @@ function updateTimerDisplay() {
 startBtn.addEventListener('click', startTimer);
 stopBtn.addEventListener('click', stopTimer);
 resetBtn.addEventListener('click', resetTimer);
+
+// Calculator functionality
+const filmTypeSelect = document.getElementById('film-type');
+const developerSelect = document.getElementById('developer');
+const rollsInput = document.getElementById('rolls');
+const calculateBtn = document.querySelector('.calculator button.calculate');
+const resultDiv = document.querySelector('.calculator .result');
+
+function calculateDevelopmentTime() {
+  const filmType = filmTypeSelect.value;
+  const developer = developerSelect.value;
+  const rolls = parseInt(rollsInput.value, 10);
+
+  let developmentTime;
+  if (filmType === '35mm') {
+    developmentTime = developer === 'c41' ? 15 : 10;
+  } else {
+    developmentTime = developer === 'c41' ? 20 : 12;
+  }
+
+  const totalTime = developmentTime * rolls;
+  const minutes = Math.floor(totalTime / 60);
+  const seconds = totalTime % 60;
+
+  resultDiv.textContent = `Tiempo total de revelado: ${minutes}min ${seconds}s`;
+}
+
+calculateBtn.addEventListener('click', calculateDevelopmentTime);
+
+// Alerts functionality
+const enableAlertsBtn = document.querySelector('.alerts .enable-alerts');
+const disableAlertsBtn = document.querySelector('.alerts .disable-alerts');
+const alertSound = document.getElementById('alert-sound');
+
+let alertsEnabled = false;
+
+function playAlertSound() {
+  if (alertsEnabled) {
+    alertSound.play();
+  }
+}
+
+enableAlertsBtn.addEventListener('click', () => {
+  alertsEnabled = true;
+  playAlertSound();
+});
+
+disableAlertsBtn.addEventListener('click', () => {
+  alertsEnabled = false;
+});

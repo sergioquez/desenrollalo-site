@@ -80,6 +80,72 @@ section h2 {
   background-color: #e03030;
 }
 
+.calculator-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  background-color: #222;
+  border: none;
+  color: #e0e0e0;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+.calculator button.calculate {
+  grid-column: 1 / -1;
+  background-color: #ff3b3b;
+  color: #0a0a0a;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.calculator button.calculate:hover {
+  background-color: #e03030;
+}
+
+.alert-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.alert-controls button {
+  background-color: #ff3b3b;
+  color: #0a0a0a;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+
+.alert-controls button:hover {
+  background-color: #e03030;
+}
+
+.alert-preview {
+  text-align: center;
+}
+
 footer {
   padding: 1rem;
   font-size: 0.8rem;
