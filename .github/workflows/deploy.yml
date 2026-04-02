@@ -1,0 +1,74 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Manual trigger
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      
+      - name: Validate files
+        run: |
+          echo "Validating required files..."
+          
+          # Check critical files exist
+          REQUIRED_FILES=("index.html" "style.css" "app.js")
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✅ $file exists"
+            else
+              echo "❌ $file missing"
+              exit 1
+            fi
+          done
+          
+          # Basic HTML validation
+          if grep -q "</html>" index.html; then
+            echo "✅ HTML structure valid"
+          else
+            echo "❌ HTML missing closing tag"
+            exit 1
+          fi
+          
+          # Check for common errors in app.js
+          if grep -q "calculateDevelopmentTime.*calculateDevelopmentTime" app.js; then
+            echo "⚠️  Warning: Possible recursion in app.js"
+          fi
+          
+          echo "✅ All validations passed"
+      
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

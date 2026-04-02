@@ -1,3 +1,28 @@
+/* CSS Variables for Theme System */
+:root {
+  /* Light theme (default) */
+  --bg-primary: #f5f5f5;
+  --bg-surface: #ffffff;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --accent: #ff3b3b;
+  --border: #e0e0e0;
+  --progress-bg: #e0e0e0;
+  --progress-fill: #ff6b6b;
+}
+
+[data-theme="dark"] {
+  /* Dark theme */
+  --bg-primary: #0a0a0a;
+  --bg-surface: #151515;
+  --text-primary: #e0e0e0;
+  --text-secondary: #888888;
+  --accent: #ff3b3b;
+  --border: #333333;
+  --progress-bg: #222222;
+  --progress-fill: #ff3b3b;
+}
+
 /* Global Styles */
 * {
   margin: 0;
@@ -7,12 +32,13 @@
 }
 
 body {
-  background-color: #0a0a0a;
-  color: #e0e0e0;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* Typography */
@@ -21,25 +47,57 @@ h1 {
   font-weight: 300;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #ff3b3b;
+  color: var(--accent);
 }
 
 h2 {
   font-size: 1.8rem;
   font-weight: 300;
-  color: #ff3b3b;
+  color: var(--accent);
   margin-bottom: 1rem;
 }
 
 p {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 /* Layout */
 header {
   padding: 2.5rem 1rem 1.5rem;
   text-align: center;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.theme-toggle {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  transform: scale(1.1);
+}
+
+.theme-toggle.active {
+  transform: scale(1.2);
+  box-shadow: 0 0 15px var(--accent);
 }
 
 main {
@@ -54,36 +112,39 @@ main {
 }
 
 section {
-  background-color: #151515;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 2.5rem;
   width: 100%;
   margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 footer {
   padding: 1.5rem;
   font-size: 0.8rem;
-  color: #444;
+  color: var(--text-secondary);
   text-align: center;
 }
 
 /* Buttons */
-button {
-  background-color: #ff3b3b;
-  color: #0a0a0a;
+button:not(.theme-toggle) {
+  background-color: var(--accent);
+  color: var(--bg-primary);
   border: none;
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
   margin-right: 0.5rem;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
-button:hover {
-  background-color: #e03030;
+button:not(.theme-toggle):hover {
+  background-color: color-mix(in srgb, var(--accent) 90%, black);
+  transform: translateY(-1px);
 }
 
 /* Timer */
@@ -112,12 +173,19 @@ button:hover {
 
 .form-group input,
 .form-group select {
-  background-color: #222;
-  border: none;
-  color: #e0e0e0;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
   padding: 0.7rem 1.1rem;
   font-size: 1rem;
   border-radius: 6px;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--accent);
 }
 
 .calculator button.calculate {
@@ -141,4 +209,22 @@ button:hover {
 
 .alert-preview {
   text-align: center;
+}
+
+/* Progress Bar */
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background-color: var(--progress-bg);
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  transition: background-color 0.3s;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--progress-fill);
+  width: 0%;
+  transition: width 0.3s ease, background-color 0.3s;
 }

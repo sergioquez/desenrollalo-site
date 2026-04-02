@@ -8,8 +8,15 @@
 </head>
 <body>
   <header>
-    <h1>Desenrollalo</h1>
-    <p>Cronómetro y alertas para el revelado de películas 35mm y 120mm</p>
+    <div class="header-content">
+      <div>
+        <h1>Desenrollalo</h1>
+        <p>Cronómetro y alertas para el revelado de películas 35mm y 120mm</p>
+      </div>
+      <button class="theme-toggle" aria-label="Cambiar tema" title="Click para cambiar entre tema claro y oscuro">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
   </header>
 
   <main>
@@ -17,6 +24,9 @@
       <h2>Cronómetro de revelado</h2>
       <div class="timer-display">
         <span class="minutes">00</span>:<span class="seconds">00</span>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar"></div>
       </div>
       <div class="timer-controls">
         <button class="start">Iniciar</button>
@@ -30,14 +40,14 @@
       <form class="calculator-form">
         <div class="form-group">
           <label for="film-type">Tipo de película:</label>
-          <select id="film-type" name="film-type">
+          <select id="film-type" name="film-type" title="35mm: Formato estándar | 120mm: Formato medio">
             <option value="35mm">35mm</option>
             <option value="120mm">120mm</option>
           </select>
         </div>
         <div class="form-group">
           <label for="developer">Revelador:</label>
-          <select id="developer" name="developer">
+          <select id="developer" name="developer" title="C-41: Para película color | D-76: Para blanco y negro">
             <option value="c41">C-41 (color)</option>
             <option value="d76">D-76 (B&W)</option>
           </select>
