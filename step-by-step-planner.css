@@ -1,0 +1,485 @@
+/* step-by-step-planner.css - Carrusel paso a paso */
+
+.step-carousel-container {
+  margin: 2rem 0;
+}
+
+.step-carousel {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.carousel-header {
+  background: linear-gradient(135deg, var(--accent), #FF6B6B);
+  color: white;
+  padding: 1.5rem;
+}
+
+.carousel-header h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: white;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.step-counter {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  text-align: center;
+}
+
+/* Body */
+.carousel-body {
+  padding: 2rem;
+}
+
+.step-content {
+  min-height: 300px;
+}
+
+/* Step Card */
+.step-card {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.step-header h4 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.step-duration {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.step-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* Step Sections */
+.step-actions,
+.step-agitation,
+.step-chemical-info,
+.chemical-change-notice,
+.next-step-action,
+.step-stats {
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, black);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.step-actions h5,
+.step-agitation h5,
+.step-stats h5 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step-actions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.step-actions li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.step-actions li:last-child {
+  border-bottom: none;
+}
+
+.step-actions li:before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+/* Agitation */
+.agitation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agitation-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  background-color: color-mix(in srgb, var(--bg-surface) 90%, black);
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.agitation-item.active {
+  background-color: color-mix(in srgb, #2196F3 20%, transparent);
+  border-left: 4px solid #2196F3;
+}
+
+.agitation-item.completed {
+  opacity: 0.7;
+}
+
+.agitation-time {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #2196F3;
+  min-width: 60px;
+  font-size: 0.9rem;
+}
+
+.agitation-action {
+  flex: 1;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+/* Chemical Info */
+.step-chemical-info {
+  background-color: color-mix(in srgb, #4CAF50 10%, transparent);
+  border-left: 4px solid #4CAF50;
+}
+
+.step-chemical-info p {
+  margin: 0.5rem 0;
+  color: var(--text-primary);
+}
+
+.step-chemical-info strong {
+  color: #4CAF50;
+}
+
+/* Chemical Change Notice */
+.chemical-change-notice {
+  background-color: color-mix(in srgb, #FF9800 15%, transparent);
+  border-left: 4px solid #FF9800;
+  color: #FF9800;
+  font-weight: 600;
+}
+
+/* Next Step Action */
+.next-step-action {
+  background-color: color-mix(in srgb, var(--accent) 15%, transparent);
+  border-left: 4px solid var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+/* Timer Container */
+.step-timer-container {
+  background-color: color-mix(in srgb, var(--bg-surface) 90%, black);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.timer-display {
+  font-family: 'Courier New', monospace;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.timer-progress {
+  margin-bottom: 1rem;
+}
+
+.timer-progress .progress-bar {
+  height: 10px;
+  background-color: var(--progress-bg);
+}
+
+.timer-progress .progress-fill {
+  background: linear-gradient(90deg, var(--accent), #FF6B6B);
+}
+
+.agitation-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.agitation-alert {
+  background-color: #2196F3;
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.alert-icon {
+  font-size: 1.2rem;
+}
+
+.alert-text {
+  flex: 1;
+  font-weight: 600;
+}
+
+/* Footer */
+.carousel-footer {
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, black);
+  padding: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.step-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.step-button {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 180px;
+}
+
+.step-button:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 90%, black);
+  transform: translateY(-2px);
+}
+
+.step-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.step-button.prev {
+  background-color: var(--text-secondary);
+}
+
+.step-button.next {
+  background-color: #4CAF50;
+}
+
+.step-button.startTimer {
+  background-color: #2196F3;
+}
+
+.step-button.skip {
+  background-color: #FF9800;
+}
+
+.step-button.restart {
+  background-color: #9C27B0;
+}
+
+/* Global Alerts */
+.global-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  z-index: 1000;
+  animation: slideInDown 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideInDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.global-alert.success {
+  background-color: #4CAF50;
+}
+
+.global-alert.info {
+  background-color: #2196F3;
+}
+
+.global-alert.warning {
+  background-color: #FF9800;
+}
+
+/* Step Type Colors */
+.step-card.info {
+  border-left: 4px solid #2196F3;
+}
+
+.step-card.preparation {
+  border-left: 4px solid #FF9800;
+}
+
+.step-card.process {
+  border-left: 4px solid #4CAF50;
+}
+
+.step-card.completion {
+  border-left: 4px solid #9C27B0;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .carousel-body {
+    padding: 1.5rem;
+  }
+  
+  .step-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .step-duration {
+    align-self: flex-start;
+  }
+  
+  .timer-display {
+    font-size: 2.5rem;
+  }
+  
+  .step-buttons {
+    flex-direction: column;
+  }
+  
+  .step-button {
+    min-width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .agitation-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  
+  .agitation-time {
+    min-width: auto;
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .step-carousel {
+    background-color: color-mix(in srgb, var(--bg-surface) 95%, black);
+  }
+  
+  .step-actions,
+  .step-agitation,
+  .step-chemical-info,
+  .chemical-change-notice,
+  .next-step-action,
+  .step-stats {
+    background-color: color-mix(in srgb, var(--bg-surface) 90%, black);
+  }
+  
+  .agitation-item {
+    background-color: color-mix(in srgb, var(--bg-surface) 85%, black);
+  }
+}

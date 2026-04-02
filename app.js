@@ -368,12 +368,12 @@ function showDevelopmentGuide() {
   
   guideContainer.innerHTML = guideHTML;
   
-  // Add planner section
+  // Add step-by-step planner section
   const plannerHTML = `
     <div class="planner-section">
-      <h4>🎯 Planificador Paso a Paso</h4>
-      <p>Guía completa con agitación específica, cambios de químicos y pausas:</p>
-      <div class="planner-container"></div>
+      <h4>🚀 Planificador Paso a Paso (Carrusel)</h4>
+      <p>Guía interactiva: avanza paso a paso con timer integrado y agitación específica:</p>
+      <div class="step-carousel-container"></div>
     </div>
     
     <div class="checklist-section">
@@ -385,15 +385,15 @@ function showDevelopmentGuide() {
   
   guideContainer.innerHTML += plannerHTML;
   
-  // Load planner script and initialize
-  const plannerScript = document.createElement('script');
-  plannerScript.src = 'process-planner.js';
-  plannerScript.onload = () => {
-    if (typeof initProcessPlanner === 'function') {
-      initProcessPlanner(filmTypeValue, developerValue, rollsNum);
+  // Load step-by-step planner script and initialize
+  const stepPlannerScript = document.createElement('script');
+  stepPlannerScript.src = 'step-by-step-planner.js';
+  stepPlannerScript.onload = () => {
+    if (typeof initStepByStepPlanner === 'function') {
+      initStepByStepPlanner(filmTypeValue, developerValue, rollsNum);
     }
   };
-  document.head.appendChild(plannerScript);
+  document.head.appendChild(stepPlannerScript);
   
   // Load checklist script
   const checklistScript = document.createElement('script');
@@ -405,11 +405,11 @@ function showDevelopmentGuide() {
   };
   document.head.appendChild(checklistScript);
   
-  // Load planner CSS
-  const plannerCSS = document.createElement('link');
-  plannerCSS.rel = 'stylesheet';
-  plannerCSS.href = 'process-planner.css';
-  document.head.appendChild(plannerCSS);
+  // Load step-by-step planner CSS
+  const stepPlannerCSS = document.createElement('link');
+  stepPlannerCSS.rel = 'stylesheet';
+  stepPlannerCSS.href = 'step-by-step-planner.css';
+  document.head.appendChild(stepPlannerCSS);
   
   // Scroll to guide
   guideContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
