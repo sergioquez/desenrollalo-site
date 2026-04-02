@@ -268,12 +268,37 @@ function getDevelopmentInstructions(filmType, developer) {
 }
 
 function showDevelopmentGuide() {
-  const filmType = document.getElementById('film-type').value;
-  const developer = document.getElementById('developer').value;
-  const rolls = document.getElementById('rolls').value;
+  const filmType = document.getElementById('film-type');
+  const developer = document.getElementById('developer');
+  const rolls = document.getElementById('rolls');
   
-  const instructions = getDevelopmentInstructions(filmType, developer);
-  const developmentTime = calculateDevelopmentTime(filmType, developer, parseInt(rolls) || 1);
+  // Input validation
+  if (!filmType || !developer || !rolls) {
+    console.error('Required form elements not found');
+    return;
+  }
+  
+  const filmTypeValue = filmType.value;
+  const developerValue = developer.value;
+  const rollsValue = rolls.value;
+  const rollsNum = parseInt(rollsValue) || 1;
+  
+  // Validate rolls input
+  if (rollsNum < 1) {
+    alert('Por favor ingresa un número válido de rollos (mínimo 1)');
+    rolls.value = '1';
+    return;
+  }
+  
+  if (rollsNum > 10) {
+    if (!confirm(`¿Estás seguro de revelar ${rollsNum} rollos a la vez? Esto requiere mucho químico.`)) {
+      rolls.value = '5';
+      return;
+    }
+  }
+  
+  const instructions = getDevelopmentInstructions(filmTypeValue, developerValue);
+  const developmentTime = calculateDevelopmentTime(filmTypeValue, developerValue, rollsNum);
   const minutes = Math.floor(developmentTime / 60);
   const seconds = developmentTime % 60;
   

@@ -10,25 +10,45 @@ class DevelopmentChecklist {
   }
 
   getProcessSteps() {
+    const filmType = document.getElementById('film-type')?.value || '35mm';
+    const is35mm = filmType === '35mm';
+    
+    // C-41 times are standard regardless of film type
+    const c41Steps = [
+      { id: 'prep', name: 'Preparación', duration: 0, description: 'Pre-temperar TODOS los químicos a 102°F ± 0.5°F, preparar equipo' },
+      { id: 'prewash', name: 'Pre-wash', duration: 120, description: 'Agua destilada 102°F, agitación constante primeros 30s' },
+      { id: 'developer', name: 'Developer', duration: 195, description: 'Developer C-41, agitación: 30s constante, luego 5 inversiones cada 30s' },
+      { id: 'blix', name: 'Blix', duration: 390, description: 'Bleach + Fix, misma agitación que developer. ¡No extender tiempo!' },
+      { id: 'wash', name: 'Wash', duration: 195, description: 'Agua 102°F, llenar/vaciar tanque 5-6 veces completamente' },
+      { id: 'stabilizer', name: 'Stabilizer', duration: 90, description: 'Agitación suave 2-3 inversiones, NO enjuagar después' },
+      { id: 'dry', name: 'Secado', duration: 0, description: 'Colgar en área limpia sin polvo, 2-4 horas' }
+    ];
+    
+    // D-76 times vary by film type (35mm vs 120mm have same times, but format matters)
+    // Common films development times at 68°F with D-76 stock
+    const d76Times = {
+      'Tri-X 400': 450, // 7.5 min
+      'HP5+ 400': 480,  // 8 min
+      'T-Max 100': 390, // 6.5 min
+      'FP4+ 125': 420   // 7 min
+    };
+    
+    // Use average time if specific film not detected
+    const devTime = 450; // 7.5 min default
+    
+    const d76Steps = [
+      { id: 'prep', name: 'Preparación', duration: 0, description: 'Preparar químicos a 68°F (20°C), equipo limpio y seco' },
+      { id: 'developer', name: 'Developer', duration: devTime, description: `D-76 stock, agitación: 1min constante (10-15 inversiones), luego 5 inversiones cada 30s` },
+      { id: 'stop', name: 'Stop Bath', duration: 60, description: 'Ácido acético 1-2% o agua con vinagre, agitación constante' },
+      { id: 'fixer', name: 'Fixer', duration: 300, description: 'Rapid fixer, agitación: 5 inversiones cada minuto. Test: leader debe volverse transparente' },
+      { id: 'wash', name: 'Wash', duration: 1200, description: '20 min agua corriente (10 cambios de agua) o usar método Ilford' },
+      { id: 'photoflo', name: 'Photo-Flo', duration: 60, description: 'Opcional: 1-2 gotas en 500ml agua, reduce manchas' },
+      { id: 'dry', name: 'Secado', duration: 0, description: 'Colgar con pinzas limpias, área sin polvo, 2-6 horas' }
+    ];
+    
     const steps = {
-      'c41': [
-        { id: 'prep', name: 'Preparación', duration: 0, description: 'Pre-temperar químicos a 102°F, preparar equipo' },
-        { id: 'prewash', name: 'Pre-wash', duration: 120, description: 'Agua destilada 102°F, agitación constante' },
-        { id: 'developer', name: 'Developer', duration: 195, description: 'Developer C-41, agitación: 30s constante, luego 5s cada 30s' },
-        { id: 'blix', name: 'Blix', duration: 390, description: 'Bleach + Fix, misma agitación que developer' },
-        { id: 'wash', name: 'Wash', duration: 195, description: 'Agua 102°F, llenar/vaciar 5-6 veces' },
-        { id: 'stabilizer', name: 'Stabilizer', duration: 90, description: 'Agitación suave, no enjuagar después' },
-        { id: 'dry', name: 'Secado', duration: 0, description: 'Colgar en área limpia sin polvo' }
-      ],
-      'd76': [
-        { id: 'prep', name: 'Preparación', duration: 0, description: 'Preparar químicos a 68°F, equipo listo' },
-        { id: 'developer', name: 'Developer', duration: 480, description: 'D-76 (stock o 1:1), agitación: 1min constante, luego 5 inversiones cada 30s' },
-        { id: 'stop', name: 'Stop Bath', duration: 60, description: 'Ácido acético 1-2%, agitación constante' },
-        { id: 'fixer', name: 'Fixer', duration: 300, description: 'Rapid fixer, hasta clear (5-10 min)' },
-        { id: 'wash', name: 'Wash', duration: 1200, description: '20 min agua corriente o método Ilford' },
-        { id: 'photoflo', name: 'Photo-Flo', duration: 60, description: 'Opcional, reduce manchas de agua' },
-        { id: 'dry', name: 'Secado', duration: 0, description: 'Colgar con pinzas limpias' }
-      ]
+      'c41': c41Steps,
+      'd76': d76Steps
     };
     
     return steps[this.processType] || steps.d76;
