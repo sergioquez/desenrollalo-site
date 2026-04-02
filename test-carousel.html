@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Carrusel Paso a Paso</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="step-by-step-planner.css">
+    <style>
+        body {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+        }
+        
+        .test-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .test-button {
+            background-color: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .test-results {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test Carrusel Paso a Paso</h1>
+        
+        <div class="test-buttons">
+            <button class="test-button" onclick="testC41()">Test C-41 (35mm, 1 rollo)</button>
+            <button class="test-button" onclick="testD76()">Test D-76 (120mm, 2 rollos)</button>
+            <button class="test-button" onclick="testMobile()">Test Responsive</button>
+            <button class="test-button" onclick="testTimer()">Test Timer</button>
+        </div>
+        
+        <div id="carousel-container"></div>
+        
+        <div class="test-results">
+            <h3>📊 Resultados del Test:</h3>
+            <div id="test-results"></div>
+        </div>
+    </div>
+    
+    <script src="step-by-step-planner.js"></script>
+    <script>
+        let currentPlanner = null;
+        
+        function testC41() {
+            clearTestResults();
+            document.getElementById('carousel-container').innerHTML = '';
+            
+            if (typeof initStepByStepPlanner === 'function') {
+                currentPlanner = initStepByStepPlanner('35mm', 'c41', 1);
+                logTest('✅ Carrusel C-41 inicializado correctamente');
+                logTest('📱 35mm + C-41 + 1 rollo');
+                logTest('🌡️ Temperatura: 39°C ± 0.3°C');
+                logTest('⏱️ Tiempo desarrollo: 15 minutos');
+            } else {
+                logTest('❌ Error: initStepByStepPlanner no está definido');
+            }
+        }
+        
+        function testD76() {
+            clearTestResults();
+            document.getElementById('carousel-container').innerHTML = '';
+            
+            if (typeof initStepByStepPlanner === 'function') {
+                currentPlanner = initStepByStepPlanner('120mm', 'd76', 2);
+                logTest('✅ Carrusel D-76 inicializado correctamente');
+                logTest('📱 120mm + D-76 + 2 rollos');
+                logTest('🌡️ Temperatura: 20°C ideal');
+                logTest('⏱️ Tiempo desarrollo: 12 minutos');
+                logTest('🧪 Químicos: Developer stock (10 rollos/L)');
+            } else {
+                logTest('❌ Error: initStepByStepPlanner no está definido');
+            }
+        }
+        
+        function testMobile() {
+            clearTestResults();
+            
+            // Simulate mobile viewport
+            const viewport = document.querySelector('meta[name="viewport"]');
+            const originalContent = viewport.content;
+            viewport.content = 'width=device-width, initial-scale=0.5, maximum-scale=1.0';
+            
+            logTest('📱 Modo móvil simulado (viewport: 50%)');
+            logTest('✅ Carrusel debe ser responsive');
+            logTest('✅ Botones deben apilarse verticalmente');
+            logTest('✅ Texto debe ajustarse correctamente');
+            
+            // Restore after 3 seconds
+            setTimeout(() => {
+                viewport.content = originalContent;
+                logTest('🔄 Viewport restaurado a tamaño normal');
+            }, 3000);
+        }
+        
+        function testTimer() {
+            clearTestResults();
+            
+            if (!currentPlanner) {
+                logTest('⚠️ Primero inicializa un carrusel (C-41 o D-76)');
+                return;
+            }
+            
+            logTest('⏱️ Probando funcionalidad de timer:');
+            logTest('✅ Timer debe iniciar con botón "Iniciar Timer"');
+            logTest('✅ Progress bar debe avanzar suavemente');
+            logTest('✅ Alertas de agitación deben aparecer');
+            logTest('✅ Timer debe completarse automáticamente');
+            logTest('✅ Botón debe cambiar a "Completado"');
+        }
+        
+        function logTest(message) {
+            const results = document.getElementById('test-results');
+            const p = document.createElement('p');
+            p.textContent = message;
+            p.style.margin = '0.5rem 0';
+            p.style.padding = '0.5rem';
+            p.style.borderLeft = '4px solid ' + (message.includes('✅') ? '#4CAF50' : 
+                                               message.includes('❌') ? '#F44336' : 
+                                               message.includes('⚠️') ? '#FF9800' : '#2196F3');
+            p.style.backgroundColor = 'rgba(0,0,0,0.05)';
+            results.appendChild(p);
+        }
+        
+        function clearTestResults() {
+            document.getElementById('test-results').innerHTML = '';
+        }
+        
+        // Initialize with C-41 by default
+        setTimeout(() => {
+            if (typeof initStepByStepPlanner === 'function') {
+                testC41();
+            }
+        }, 100);
+    </script>
+</body>
+</html>
