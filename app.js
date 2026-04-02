@@ -368,26 +368,48 @@ function showDevelopmentGuide() {
   
   guideContainer.innerHTML = guideHTML;
   
-  // Add interactive checklist
-  const checklistHTML = `
+  // Add planner section
+  const plannerHTML = `
+    <div class="planner-section">
+      <h4>🎯 Planificador Paso a Paso</h4>
+      <p>Guía completa con agitación específica, cambios de químicos y pausas:</p>
+      <div class="planner-container"></div>
+    </div>
+    
     <div class="checklist-section">
-      <h4>🎯 Checklist Interactivo</h4>
+      <h4>📋 Checklist Interactivo</h4>
       <p>Sigue el proceso paso a paso con timers integrados:</p>
       <div class="checklist-container"></div>
     </div>
   `;
   
-  guideContainer.innerHTML += checklistHTML;
+  guideContainer.innerHTML += plannerHTML;
   
-  // Load checklist script and initialize
-  const script = document.createElement('script');
-  script.src = 'guided-checklist.js';
-  script.onload = () => {
-    if (typeof initDevelopmentChecklist === 'function') {
-      initDevelopmentChecklist(developer);
+  // Load planner script and initialize
+  const plannerScript = document.createElement('script');
+  plannerScript.src = 'process-planner.js';
+  plannerScript.onload = () => {
+    if (typeof initProcessPlanner === 'function') {
+      initProcessPlanner(filmTypeValue, developerValue, rollsNum);
     }
   };
-  document.head.appendChild(script);
+  document.head.appendChild(plannerScript);
+  
+  // Load checklist script
+  const checklistScript = document.createElement('script');
+  checklistScript.src = 'guided-checklist.js';
+  checklistScript.onload = () => {
+    if (typeof initDevelopmentChecklist === 'function') {
+      initDevelopmentChecklist(developerValue);
+    }
+  };
+  document.head.appendChild(checklistScript);
+  
+  // Load planner CSS
+  const plannerCSS = document.createElement('link');
+  plannerCSS.rel = 'stylesheet';
+  plannerCSS.href = 'process-planner.css';
+  document.head.appendChild(plannerCSS);
   
   // Scroll to guide
   guideContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });

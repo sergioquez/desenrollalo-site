@@ -1,0 +1,688 @@
+/* process-planner.css - Styles for step-by-step film development planner */
+
+.planner-container {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.planner-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.planner-header h2 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.planner-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meta-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meta-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Chemical Capacity */
+.chemical-capacity {
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, var(--accent));
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
+}
+
+.chemical-capacity h3 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.capacity-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.capacity-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chemical-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.chemical-remaining {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.capacity-bar {
+  height: 8px;
+  background-color: var(--progress-bg);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.capacity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #FF6B6B);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.capacity-warning {
+  background-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  border-left: 4px solid var(--accent);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.chemical-input {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.chemical-input label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.chemical-input input {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  width: 80px;
+}
+
+.chemical-input button {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.chemical-input button:hover {
+  background-color: color-mix(in srgb, var(--accent) 90%, black);
+}
+
+/* Planner Steps */
+.planner-steps h3 {
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.planner-step {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.planner-step.active {
+  border-color: var(--accent);
+  background-color: color-mix(in srgb, var(--bg-surface) 90%, var(--accent));
+  box-shadow: 0 4px 12px rgba(255, 59, 59, 0.15);
+  transform: translateY(-2px);
+}
+
+.planner-step.completed {
+  opacity: 0.8;
+  border-color: #4CAF50;
+}
+
+.planner-step.requires-confirmation {
+  border-left: 4px solid #FF9800;
+}
+
+.planner-step .chemical-change {
+  border-left: 4px solid #2196F3;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.planner-step.completed .step-number {
+  background-color: #4CAF50;
+}
+
+.step-info {
+  flex: 1;
+}
+
+.step-info h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.step-meta {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.step-phase {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.step-duration {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.step-chemical {
+  color: #2196F3;
+  font-weight: 600;
+}
+
+.step-status {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.step-description {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.step-actions-list,
+.step-agitation-preview {
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, black);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.step-actions-list h5,
+.step-agitation-preview h5 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.step-actions-list ul,
+.step-agitation-preview ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.step-actions-list li,
+.step-agitation-preview li {
+  padding: 0.25rem 0;
+  padding-left: 1.25rem;
+  position: relative;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.step-actions-list li:before,
+.step-agitation-preview li:before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.confirmation-required,
+.chemical-change {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.confirmation-required {
+  background-color: color-mix(in srgb, #FF9800 20%, transparent);
+  color: #FF9800;
+}
+
+.chemical-change {
+  background-color: color-mix(in srgb, #2196F3 20%, transparent);
+  color: #2196F3;
+}
+
+/* Planner Controls */
+.planner-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.planner-controls button {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.planner-controls button:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--accent) 90%, black);
+  transform: translateY(-2px);
+}
+
+.planner-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.planner-controls .skip-to-timer {
+  background-color: #2196F3;
+}
+
+.planner-controls .reset-planner {
+  background-color: var(--text-secondary);
+}
+
+/* Active Process */
+.active-process {
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, var(--accent));
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid var(--accent);
+}
+
+.active-process h3 {
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.current-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.step-title h4 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: var(--text-primary);
+}
+
+.step-title p {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.step-timer {
+  background-color: color-mix(in srgb, var(--bg-surface) 90%, black);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.timer-display {
+  font-family: 'Courier New', monospace;
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.timer-progress {
+  height: 10px;
+  background-color: var(--progress-bg);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #FF6B6B);
+  width: 0%;
+  transition: width 1s linear;
+}
+
+.step-actions {
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, black);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.step-actions h5 {
+  margin: 0 0 0.75rem 0;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.step-actions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.step-actions li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.step-actions li:last-child {
+  border-bottom: none;
+}
+
+.step-actions li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.step-agitation {
+  background-color: color-mix(in srgb, #2196F3 10%, transparent);
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid #2196F3;
+}
+
+.step-agitation h4 {
+  margin: 0 0 0.75rem 0;
+  color: #2196F3;
+  font-size: 1rem;
+}
+
+.agitation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agitation-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, black);
+  border-radius: 4px;
+}
+
+.agitation-time {
+  font-family: monospace;
+  font-weight: bold;
+  color: #2196F3;
+  min-width: 50px;
+}
+
+.agitation-action {
+  flex: 1;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.step-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.step-controls button {
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pause-process {
+  background-color: #FF9800;
+  color: white;
+}
+
+.pause-process:hover {
+  background-color: #F57C00;
+}
+
+.next-step {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.next-step:hover {
+  background-color: #388E3C;
+}
+
+.cancel-process {
+  background-color: #F44336;
+  color: white;
+}
+
+.cancel-process:hover {
+  background-color: #D32F2F;
+}
+
+/* Agitation Alerts */
+.agitation-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #2196F3;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.alert-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.alert-icon {
+  font-size: 1.2rem;
+}
+
+.alert-text {
+  font-weight: 600;
+}
+
+/* Process Complete */
+.process-complete {
+  text-align: center;
+  padding: 2rem;
+}
+
+.process-complete h3 {
+  color: #4CAF50;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.process-complete p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+}
+
+.completion-stats {
+  background-color: color-mix(in srgb, var(--bg-surface) 95%, #4CAF50);
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.completion-stats p {
+  margin: 0.75rem 0;
+  font-size: 1rem;
+}
+
+.completion-stats strong {
+  color: var(--text-primary);
+  display: inline-block;
+  min-width: 180px;
+}
+
+.process-complete button {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0 0.5rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.process-complete button:hover {
+  background-color: color-mix(in srgb, var(--accent) 90%, black);
+  transform: translateY(-2px);
+}
+
+.process-complete .view-history {
+  background-color: #2196F3;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .planner-container {
+    padding: 1.5rem;
+  }
+  
+  .planner-meta {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .capacity-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .planner-controls button {
+    min-width: 100%;
+  }
+  
+  .step-controls {
+    flex-direction: column;
+  }
+  
+  .timer-display {
+    font-size: 2.5rem;
+  }
+  
+  .agitation-alert {
+    top: 10px;
+    right: 10px;
+    left: 10px
