@@ -15,11 +15,11 @@ class DevelopmentChecklist {
     
     // C-41 times are standard regardless of film type
     const c41Steps = [
-      { id: 'prep', name: 'Preparación', duration: 0, description: 'Pre-temperar TODOS los químicos a 102°F ± 0.5°F, preparar equipo' },
-      { id: 'prewash', name: 'Pre-wash', duration: 120, description: 'Agua destilada 102°F, agitación constante primeros 30s' },
+      { id: 'prep', name: 'Preparación', duration: 0, description: 'Pre-temperar TODOS los químicos a 39°C ± 0.3°C, preparar equipo' },
+      { id: 'prewash', name: 'Pre-wash', duration: 120, description: 'Agua destilada 39°C, agitación constante primeros 30s' },
       { id: 'developer', name: 'Developer', duration: 195, description: 'Developer C-41, agitación: 30s constante, luego 5 inversiones cada 30s' },
       { id: 'blix', name: 'Blix', duration: 390, description: 'Bleach + Fix, misma agitación que developer. ¡No extender tiempo!' },
-      { id: 'wash', name: 'Wash', duration: 195, description: 'Agua 102°F, llenar/vaciar tanque 5-6 veces completamente' },
+      { id: 'wash', name: 'Wash', duration: 195, description: 'Agua 39°C, llenar/vaciar tanque 5-6 veces completamente' },
       { id: 'stabilizer', name: 'Stabilizer', duration: 90, description: 'Agitación suave 2-3 inversiones, NO enjuagar después' },
       { id: 'dry', name: 'Secado', duration: 0, description: 'Colgar en área limpia sin polvo, 2-4 horas' }
     ];
@@ -37,7 +37,7 @@ class DevelopmentChecklist {
     const devTime = 450; // 7.5 min default
     
     const d76Steps = [
-      { id: 'prep', name: 'Preparación', duration: 0, description: 'Preparar químicos a 68°F (20°C), equipo limpio y seco' },
+      { id: 'prep', name: 'Preparación', duration: 0, description: 'Preparar químicos a 20°C, equipo limpio y seco' },
       { id: 'developer', name: 'Developer', duration: devTime, description: `D-76 stock, agitación: 1min constante (10-15 inversiones), luego 5 inversiones cada 30s` },
       { id: 'stop', name: 'Stop Bath', duration: 60, description: 'Ácido acético 1-2% o agua con vinagre, agitación constante' },
       { id: 'fixer', name: 'Fixer', duration: 300, description: 'Rapid fixer, agitación: 5 inversiones cada minuto. Test: leader debe volverse transparente' },

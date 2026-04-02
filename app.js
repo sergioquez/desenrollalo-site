@@ -84,8 +84,14 @@ function updateProgressBar(currentTime, totalTime) {
 }
 
 function calculateDevelopmentTime(filmType, developer, rolls) {
-  const developmentTime = DEVELOPMENT_TIMES[filmType][developer];
-  return developmentTime * rolls;
+  // DEVELOPMENT_TIMES are in MINUTES, convert to seconds
+  const developmentTimeMinutes = DEVELOPMENT_TIMES[filmType][developer];
+  const developmentTimeSeconds = developmentTimeMinutes * 60;
+  
+  // Add 30 seconds per additional roll for handling
+  const additionalTime = (rolls - 1) * 30;
+  
+  return developmentTimeSeconds + additionalTime;
 }
 
 function playAlertSound() {
@@ -216,11 +222,11 @@ function getDevelopmentInstructions(filmType, developer) {
     'c41': {
       title: 'Proceso C-41 (Color)',
       steps: [
-        '1. Pre-temperar químicos a 102°F (39°C)',
-        '2. Pre-wash (opcional): Agua 102°F, 1-2 min',
+        '1. Pre-temperar químicos a 39°C ± 0.3°C',
+        '2. Pre-wash (opcional): Agua 39°C, 1-2 min',
         '3. Developer: 3 min 15 seg, agitación constante',
         '4. Blix: 6 min 30 seg, misma agitación',
-        '5. Wash: Agua 102°F, 3 min 15 seg',
+        '5. Wash: Agua 39°C, 3 min 15 seg',
         '6. Stabilizer: 1 min 30 seg, agitación suave',
         '7. Secar en área limpia sin polvo'
       ],
@@ -231,11 +237,13 @@ function getDevelopmentInstructions(filmType, developer) {
         'Agua destilada'
       ],
       warnings: [
-        '⚠️ Temperatura crítica: 102°F ± 0.5°F',
+        '🚨 Temperatura crítica: 39°C ± 0.3°C',
         '⚠️ Usar guantes y gafas de seguridad',
-        '⚠️ Químicos corrosivos, manejar con cuidado'
+        '⚠️ Químicos corrosivos, manejar con cuidado',
+        '🚨 No extender tiempos de developer/blix'
       ],
-      temperature: '102°F (39°C) ± 0.5°F',
+      temperature: '39°C ± 0.3°C',
+      temperatureRange: '38.7°C - 39.3°C',
       totalTime: '~15 minutos'
     },
     'd76': {
@@ -255,11 +263,13 @@ function getDevelopmentInstructions(filmType, developer) {
         'Photo-Flo (opcional)'
       ],
       warnings: [
-        '✅ Temperatura flexible: 65-75°F (68°F ideal)',
+        '✅ Temperatura flexible: 18-24°C (20°C ideal)',
         '⚠️ Usar guantes para protección',
-        '✅ Puede ajustarse tiempo por temperatura'
+        '✅ Puede ajustarse tiempo por temperatura',
+        '✅ Developer reutilizable (stock)'
       ],
-      temperature: '68°F (20°C) ideal, 65-75°F aceptable',
+      temperature: '20°C ideal, 18-24°C aceptable',
+      temperatureRange: '18°C - 24°C',
       totalTime: '~45-60 minutos'
     }
   };
@@ -308,6 +318,7 @@ function showDevelopmentGuide() {
       <div class="guide-meta">
         <p><strong>Tiempo total desarrollo:</strong> ${minutes}min ${seconds}s</p>
         <p><strong>Temperatura:</strong> ${instructions.temperature}</p>
+        <p><strong>Rango temperatura:</strong> ${instructions.temperatureRange}</p>
         <p><strong>Tiempo proceso completo:</strong> ${instructions.totalTime}</p>
       </div>
       
