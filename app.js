@@ -209,3 +209,129 @@ document.addEventListener('DOMContentLoaded', () => {
   
   console.log('Timer initialized successfully');
 });
+
+// Film development expert functions
+function getDevelopmentInstructions(filmType, developer) {
+  const instructions = {
+    'c41': {
+      title: 'Proceso C-41 (Color)',
+      steps: [
+        '1. Pre-temperar químicos a 102°F (39°C)',
+        '2. Pre-wash (opcional): Agua 102°F, 1-2 min',
+        '3. Developer: 3 min 15 seg, agitación constante',
+        '4. Blix: 6 min 30 seg, misma agitación',
+        '5. Wash: Agua 102°F, 3 min 15 seg',
+        '6. Stabilizer: 1 min 30 seg, agitación suave',
+        '7. Secar en área limpia sin polvo'
+      ],
+      chemicals: [
+        'Developer C-41',
+        'Blix (bleach + fix)',
+        'Stabilizer',
+        'Agua destilada'
+      ],
+      warnings: [
+        '⚠️ Temperatura crítica: 102°F ± 0.5°F',
+        '⚠️ Usar guantes y gafas de seguridad',
+        '⚠️ Químicos corrosivos, manejar con cuidado'
+      ],
+      temperature: '102°F (39°C) ± 0.5°F',
+      totalTime: '~15 minutos'
+    },
+    'd76': {
+      title: 'Proceso D-76 (Blanco y Negro)',
+      steps: [
+        '1. Developer D-76: 6-12 min (depende de película)',
+        '2. Stop bath: Ácido acético 1-2%, 30-60 seg',
+        '3. Fixer: Rapid fixer, 5-10 min (hasta clear)',
+        '4. Wash: 20-30 min agua corriente o método Ilford',
+        '5. Photo-Flo (opcional): 30-60 seg para menos manchas',
+        '6. Secar colgado con pinzas limpias'
+      ],
+      chemicals: [
+        'Developer D-76 (stock o 1:1)',
+        'Stop bath (ácido acético)',
+        'Rapid fixer',
+        'Photo-Flo (opcional)'
+      ],
+      warnings: [
+        '✅ Temperatura flexible: 65-75°F (68°F ideal)',
+        '⚠️ Usar guantes para protección',
+        '✅ Puede ajustarse tiempo por temperatura'
+      ],
+      temperature: '68°F (20°C) ideal, 65-75°F aceptable',
+      totalTime: '~45-60 minutos'
+    }
+  };
+  
+  return instructions[developer] || instructions.d76;
+}
+
+function showDevelopmentGuide() {
+  const filmType = document.getElementById('film-type').value;
+  const developer = document.getElementById('developer').value;
+  const rolls = document.getElementById('rolls').value;
+  
+  const instructions = getDevelopmentInstructions(filmType, developer);
+  const developmentTime = calculateDevelopmentTime(filmType, developer, parseInt(rolls) || 1);
+  const minutes = Math.floor(developmentTime / 60);
+  const seconds = developmentTime % 60;
+  
+  let guideHTML = `
+    <div class="development-guide">
+      <h3>${instructions.title}</h3>
+      <div class="guide-meta">
+        <p><strong>Tiempo total desarrollo:</strong> ${minutes}min ${seconds}s</p>
+        <p><strong>Temperatura:</strong> ${instructions.temperature}</p>
+        <p><strong>Tiempo proceso completo:</strong> ${instructions.totalTime}</p>
+      </div>
+      
+      <div class="guide-section">
+        <h4>📋 Pasos:</h4>
+        <ul class="steps-list">
+          ${instructions.steps.map(step => `<li>${step}</li>`).join('')}
+        </ul>
+      </div>
+      
+      <div class="guide-section">
+        <h4>🧪 Químicos necesarios:</h4>
+        <ul class="chemicals-list">
+          ${instructions.chemicals.map(chem => `<li>${chem}</li>`).join('')}
+        </ul>
+      </div>
+      
+      <div class="guide-section warnings">
+        <h4>⚠️ Advertencias de seguridad:</h4>
+        <ul class="warnings-list">
+          ${instructions.warnings.map(warn => `<li>${warn}</li>`).join('')}
+        </ul>
+      </div>
+      
+      <div class="guide-tips">
+        <h4>💡 Consejos:</h4>
+        <ul>
+          <li>Pre-temperar todos los químicos antes de empezar</li>
+          <li>Agitación consistente es clave para resultados uniformes</li>
+          <li>Anotar tiempos y temperaturas para consistencia</li>
+          <li>Limpieza inmediata del equipo prolonga su vida útil</li>
+        </ul>
+      </div>
+    </div>
+  `;
+  
+  // Create or update guide display
+  let guideContainer = document.querySelector('.development-guide-container');
+  if (!guideContainer) {
+    guideContainer = document.createElement('div');
+    guideContainer.className = 'development-guide-container';
+    const calculatorSection = document.querySelector('.calculator');
+    if (calculatorSection) {
+      calculatorSection.appendChild(guideContainer);
+    }
+  }
+  
+  guideContainer.innerHTML = guideHTML;
+  
+  // Scroll to guide
+  guideContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}

@@ -228,3 +228,151 @@ button:not(.theme-toggle):hover {
   width: 0%;
   transition: width 0.3s ease, background-color 0.3s;
 }
+
+/* Development Guide */
+.development-guide {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.development-guide h3 {
+  color: var(--accent);
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.guide-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.guide-meta p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.guide-meta strong {
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.guide-section {
+  margin-bottom: 1.5rem;
+}
+
+.guide-section h4 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.steps-list,
+.chemicals-list,
+.warnings-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.steps-list li,
+.chemicals-list li,
+.warnings-list li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.steps-list li:last-child,
+.chemicals-list li:last-child,
+.warnings-list li:last-child {
+  border-bottom: none;
+}
+
+.steps-list li:before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+.chemicals-list li:before {
+  content: '🧪';
+  position: absolute;
+  left: 0;
+}
+
+.warnings-list li:before {
+  content: '⚠️';
+  position: absolute;
+  left: 0;
+}
+
+.warnings {
+  background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid var(--accent);
+}
+
+.guide-tips {
+  background-color: color-mix(in srgb, var(--accent) 5%, transparent);
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid #4CAF50;
+}
+
+.guide-tips h4 {
+  color: #4CAF50;
+}
+
+.guide-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.guide-tips li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.guide-tips li:before {
+  content: '💡';
+  position: absolute;
+  left: 0;
+}
+
+/* Guide button */
+.guide-button {
+  background-color: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.guide-button:hover {
+  background-color: color-mix(in srgb, var(--accent) 90%, black);
+  transform: translateY(-1px);
+}
