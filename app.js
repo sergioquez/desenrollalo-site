@@ -332,6 +332,27 @@ function showDevelopmentGuide() {
   
   guideContainer.innerHTML = guideHTML;
   
+  // Add interactive checklist
+  const checklistHTML = `
+    <div class="checklist-section">
+      <h4>🎯 Checklist Interactivo</h4>
+      <p>Sigue el proceso paso a paso con timers integrados:</p>
+      <div class="checklist-container"></div>
+    </div>
+  `;
+  
+  guideContainer.innerHTML += checklistHTML;
+  
+  // Load checklist script and initialize
+  const script = document.createElement('script');
+  script.src = 'guided-checklist.js';
+  script.onload = () => {
+    if (typeof initDevelopmentChecklist === 'function') {
+      initDevelopmentChecklist(developer);
+    }
+  };
+  document.head.appendChild(script);
+  
   // Scroll to guide
   guideContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
