@@ -5,6 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Desenrollalo</title>
   <link rel="stylesheet" href="style.css">
+    
+    <!-- Basic Analytics Setup -->
+    <script>
+      // Simple analytics tracking
+      window.addEventListener("load", function() {
+        console.log("Desenrollalo v1.0 loaded");
+        
+        // Track theme preference
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        console.log("User theme preference:", savedTheme);
+        
+        // Track tooltip interactions
+        document.querySelectorAll("[title]").forEach(element => {
+          element.addEventListener("mouseenter", function() {
+            console.log("Tooltip viewed:", this.getAttribute("title"));
+          });
+        });
+      });
+    </script>
 </head>
 <body>
   <header>
@@ -78,5 +97,6 @@
   </footer>
 
   <script src="app.js"></script>
+  <script src="analytics.js"></script>
 </body>
 </html>
