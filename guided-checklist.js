@@ -24,17 +24,11 @@ class DevelopmentChecklist {
       { id: 'dry', name: 'Secado', duration: 0, description: 'Colgar en área limpia sin polvo, 2-4 horas' }
     ];
     
-    // D-76 times vary by film type (35mm vs 120mm have same times, but format matters)
-    // Common films development times at 68°F with D-76 stock
-    const d76Times = {
-      'Tri-X 400': 450, // 7.5 min
-      'HP5+ 400': 480,  // 8 min
-      'T-Max 100': 390, // 6.5 min
-      'FP4+ 125': 420   // 7 min
-    };
-    
-    // Use average time if specific film not detected
-    const devTime = 450; // 7.5 min default
+    // D-76 times: DEVELOPMENT_TIMES has 10 min for 35mm, 12 min for 120mm
+    // These are TOTAL development times from the calculator
+    const filmType = document.getElementById('film-type')?.value || '35mm';
+    const devTimeMinutes = filmType === '35mm' ? 10 : 12; // From DEVELOPMENT_TIMES
+    const devTime = devTimeMinutes * 60; // Convert to seconds
     
     const d76Steps = [
       { id: 'prep', name: 'Preparación', duration: 0, description: 'Preparar químicos a 20°C, equipo limpio y seco' },
