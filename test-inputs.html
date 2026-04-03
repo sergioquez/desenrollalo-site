@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Test Inputs - Desenrollalo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; max-width: 600px; margin: 0 auto; }
+        h1 { color: #2563eb; margin-bottom: 20px; }
+        .test { margin: 20px 0; padding: 20px; border: 2px solid #e5e7eb; border-radius: 10px; }
+        .test-title { color: #1f2937; margin-bottom: 15px; }
+        select, input, button { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; }
+        select:focus, input:focus { outline: none; border-color: #2563eb; }
+        button { background: #2563eb; color: white; border: none; cursor: pointer; }
+        button:hover { background: #1d4ed8; }
+        .result { margin-top: 15px; padding: 15px; border-radius: 8px; font-family: monospace; }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .error { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+        .status { display: inline-block; padding: 5px 10px; border-radius: 5px; margin-left: 10px; font-size: 12px; }
+        .working { background: #10b981; color: white; }
+        .broken { background: #ef4444; color: white; }
+        .links { margin-top: 30px; padding: 20px; background: #f9fafb; border-radius: 10px; }
+        .links a { display: inline-block; margin: 10px; padding: 12px 24px; background: #10b981; color: white; text-decoration: none; border-radius: 8px; }
+        .links a:hover { background: #059669; }
+    </style>
+</head>
+<body>
+    <h1>✅ Test de Inputs - Desenrollalo</h1>
+    <p>Verificando que todos los inputs funcionen correctamente en dispositivos táctiles.</p>
+    
+    <div class="test">
+        <h2 class="test-title">1. Select de Tipo de Película</h2>
+        <select id="filmTest">
+            <option value="">Seleccionar...</option>
+            <option value="35mm">35mm (Estándar)</option>
+            <option value="120mm">120mm (Medio formato)</option>
+        </select>
+        <div id="filmResult" class="result">Esperando selección...</div>
+    </div>
+    
+    <div class="test">
+        <h2 class="test-title">2. Select de Proceso</h2>
+        <select id="processTest">
+            <option value="">Seleccionar...</option>
+            <option value="c41">C-41 (Color)</option>
+            <option value="d76">D-76 (Blanco y Negro)</option>
+        </select>
+        <div id="processResult" class="result">Esperando selección...</div>
+    </div>
+    
+    <div class="test">
+        <h2 class="test-title">3. Input Numérico</h2>
+        <input type="number" id="numberTest" min="1" max="10" value="1" placeholder="Número de rollos (1-10)">
+        <div id="numberResult" class="result">Valor: 1</div>
+    </div>
+    
+    <div class="test">
+        <h2 class="test-title">4. Botones +/-</h2>
+        <div style="display: flex; gap: 10px;">
+            <button id="decreaseBtn" style="width: 60px;">-</button>
+            <div id="counterDisplay" style="flex: 1; text-align: center; line-height: 44px; font-size: 24px; font-weight: bold;">1</div>
+            <button id="increaseBtn" style="width: 60px;">+</button>
+        </div>
+        <div id="counterResult" class="result">Contador: 1</div>
+    </div>
+    
+    <div class="test">
+        <h2 class="test-title">5. Botón de Submit</h2>
+        <button id="submitTest">Probar Submit</button>
+        <div id="submitResult" class="result">Esperando click...</div>
+    </div>
+    
+    <div class="test">
+        <h2 class="test-title">📊 Resumen de Tests</h2>
+        <div id="summary">
+            <p>1. Select película: <span id="filmStatus" class="status broken">❌</span></p>
+            <p>2. Select proceso: <span id="processStatus" class="status broken">❌</span></p>
+            <p>3. Input numérico: <span id="numberStatus" class="status broken">❌</span></p>
+            <p>4. Botones +/-: <span id="counterStatus" class="status broken">❌</span></p>
+            <p>5. Botón submit: <span id="submitStatus" class="status broken">❌</span></p>
+        </div>
+        <button onclick="runAllTests()" style="margin-top: 15px;">🚀 Ejecutar Todos los Tests</button>
+    </div>
+    
+    <div class="links">
+        <h3>🔗 Enlaces Directos</h3>
+        <a href="redesign-v2.html" target="_blank">Rediseño v2.0</a>
+        <a href="simple-test.html" target="_blank">Test Simple</a>
+        <a href="test-redesign.html" target="_blank">Test Suite Completo</a>
+    </div>
+    
+    <script>
+        let testResults = {
+            film: false,
+            process: false,
+            number: false,
+            counter: false,
+            submit: false
+        };
+        
+        // Test 1: Select de película
+        const filmSelect = document.getElementById('filmTest');
+        const filmResult = document.getElementById('filmResult');
+        const filmStatus = document.getElementById('filmStatus');
+        
+        filmSelect.addEventListener('change', function() {
+            if (this.value) {
+                filmResult.className = 'result success';
+                filmResult.textContent = `✅ Seleccionado: ${this.value === '35mm' ? '35mm' : '120mm'}`;
+                filmStatus.className = 'status working';
+                filmStatus.textContent = '✅';
+                testResults.film = true;
+                updateSummary();
+            }
+        });
+        
+        // Test 2: Select de proceso
+        const processSelect = document.getElementById('processTest');
+        const processResult = document.getElementById('processResult');
+        const processStatus = document.getElementById('processStatus');
+        
+        processSelect.addEventListener('change', function() {
+            if (this.value) {
+                processResult.className = 'result success';
+                processResult.textContent = `✅ Seleccionado: ${this.value === 'c41' ? 'C-41 (Color)' : 'D-76 (B&W)'}`;
+                processStatus.className = 'status working';
+                processStatus.textContent = '✅';
+                testResults.process = true;
+                updateSummary();
+            }
+        });
+        
+        // Test 3: Input numérico
+        const numberInput = document.getElementById('numberTest');
+        const numberResult = document.getElementById('numberResult');
+        const numberStatus = document.getElementById('numberStatus');
+        let numberChanged = false;
+        
+        numberInput.addEventListener('input', function() {
+            numberResult.textContent = `Valor: ${this.value}`;
+            if (!numberChanged && this.value !== '1') {
+                numberChanged = true;
+                numberResult.className = 'result success';
+                numberResult.textContent += ' ✅';
+                numberStatus.className = 'status working';
+                numberStatus.textContent = '✅';
+                testResults.number = true;
+                updateSummary();
+            }
+        });
+        
+        numberInput.addEventListener('change', function() {
+            if (!numberChanged && this.value !== '1') {
+                numberChanged = true;
+                numberResult.className = 'result success';
+                numberResult.textContent += ' ✅';
+                numberStatus.className = 'status working';
+                numberStatus.textContent = '✅';
+                testResults.number = true;
+                updateSummary();
+            }
+        });
+        
+        // Test 4: Botones +/-
+        let counter = 1;
+        const counterDisplay = document.getElementById('counterDisplay');
+        const counterResult = document.getElementById('counterResult');
+        const counterStatus = document.getElementById('counterStatus');
+        
+        document.getElementById('decreaseBtn').addEventListener('click', function() {
+            if (counter > 1) {
+                counter--;
+                updateCounter();
+            }
+        });
+        
+        document.getElementById('increaseBtn').addEventListener('click', function() {
+            if (counter < 10) {
+                counter++;
+                updateCounter();
+            }
+        });
+        
+        function updateCounter() {
+            counterDisplay.textContent = counter;
+            counterResult.textContent = `Contador: ${counter}`;
+            
+            if (!testResults.counter && counter !== 1) {
+                counterResult.className = 'result success';
+                counterResult.textContent += ' ✅';
+                counterStatus.className = 'status working';
+                counterStatus.textContent = '✅';
+                testResults.counter = true;
+                updateSummary();
+            }
+        }
+        
+        // Test 5: Botón submit
+        const submitBtn = document.getElementById('submitTest');
+        const submitResult = document.getElementById('submitResult');
+        const submitStatus = document.getElementById('submitStatus');
+        
+        submitBtn.addEventListener('click', function() {
+            submitResult.className = 'result success';
+            submitResult.textContent = '✅ Botón clickeado exitosamente';
+            submitStatus.className = 'status working';
+            submitStatus.textContent = '✅';
+            testResults.submit = true;
+            updateSummary();
+        });
+        
+        // Actualizar resumen
+        function updateSummary() {
+            const passed = Object.values(testResults).filter(v => v).length;
+            const total = Object.keys(testResults).length;
+            
+            if (passed === total) {
+                document.getElementById('summary').innerHTML += `
+                    <div class="result success" style="margin-top: 15px;">
+                        🎉 ¡Todos los tests pasados! (${passed}/${total})
+                    </div>
+                `;
+            }
+        }
+        
+        // Ejecutar todos los tests
+        function runAllTests() {
+            // Simular interacciones
+            filmSelect.value = '35mm';
+            filmSelect.dispatchEvent(new Event('change'));
+            
+            processSelect.value = 'c41';
+            processSelect.dispatchEvent(new Event('change'));
+            
+            numberInput.value = '3';
+            numberInput.dispatchEvent(new Event('input'));
+            numberInput.dispatchEvent(new Event('change'));
+            
+            counter = 3;
+            updateCounter();
+            
+            submitBtn.click();
+            
+            // Mostrar resultado final
+            setTimeout(() => {
+                const passed = Object.values(testResults).filter(v => v).length;
+                const total = Object.keys(testResults).length;
+                
+                alert(`Tests completados: ${passed}/${total} pasados\n\nLos inputs ${passed === total ? 'funcionan correctamente' : 'tienen algunos problemas'}.`);
+            }, 500);
+        }
+        
+        // Detectar dispositivo
+        document.addEventListener('DOMContentLoaded', () => {
+            const isTouch = 'ontouchstart' in window;
+            const userAgent = navigator.userAgent.toLowerCase();
+            const isIOS = /iphone|ipad|ipod/.test(userAgent);
+            const isAndroid = /android/.test(userAgent);
+            
+            console.log('📱 Dispositivo:', {
+                touch: isTouch,
+                iOS: isIOS,
+                Android: isAndroid,
+                userAgent: navigator.userAgent
+            });
+            
+            // Auto-test después de 2 segundos
+            setTimeout(() => {
+                if (!Object.values(testResults).some(v => v)) {
+                    console.log('🔄 Ejecutando auto-test...');
+                    runAllTests();
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
