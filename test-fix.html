@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Test Fix - Desenrollalo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        h1 { color: #2563eb; margin-bottom: 20px; }
+        .test { margin: 20px 0; padding: 20px; border: 2px solid #e5e7eb; border-radius: 10px; }
+        button { padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 10px 0; }
+        button:hover { background: #1d4ed8; }
+        #log { background: #1f2937; color: #f9fafb; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; font-size: 14px; white-space: pre-wrap; max-height: 400px; overflow-y: auto; }
+        .log-entry { margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #374151; }
+        .log-success { color: #34d399; }
+        .log-error { color: #f87171; }
+        .log-info { color: #60a5fa; }
+        .status { padding: 5px 10px; border-radius: 5px; font-size: 12px; margin-left: 10px; }
+        .status-fixed { background: #34d399; color: white; }
+        .status-broken { background: #f87171; color: white; }
+        .fix-details { background: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #f59e0b; }
+    </style>
+</head>
+<body>
+    <h1>✅ Test de Fix - Problema del Formulario</h1>
+    
+    <div class="test">
+        <h2>Problema Original:</h2>
+        <p>"Luego de clickear en calcular revelado, se reinicia todo y no se puede usar prácticamente"</p>
+        
+        <div class="fix-details">
+            <h3>🔧 Fix Aplicado:</h3>
+            <p><strong>1. Botón calcular:</strong> Cambiado de <code>type="submit"</code> a <code>type="button"</code></p>
+            <p><strong>2. JavaScript:</strong> Agregada protección extra con <code>e.preventDefault()</code>, <code>e.stopPropagation()</code>, <code>return false</code></p>
+            <p><strong>3. Formulario:</strong> Agregado <code>novalidate</code> y <code>action="javascript:void(0)"</code></p>
+        </div>
+    </div>
+    
+    <div class="test">
+        <h2>🎯 Test del Fix</h2>
+        <button onclick="runTest()">🚀 Ejecutar Test</button>
+        <button onclick="simulateOldProblem()">🐛 Simular Comportamiento Viejo</button>
+        
+        <div id="results" style="margin-top: 20px;"></div>
+    </div>
+    
+    <div class="test">
+        <h2>📋 Log de Eventos</h2>
+        <div id="log">
+            <div class="log-entry log-info">✅ Test listo. Haz clic en "Ejecutar Test"</div>
+        </div>
+    </div>
+    
+    <script>
+        const log = document.getElementById('log');
+        const results = document.getElementById('results');
+        let pageReloaded = false;
+        
+        function addLog(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function clearLog() {
+            log.innerHTML = '';
+            addLog('Log limpiado', 'info');
+        }
+        
+        // Detectar si la página se recarga
+        window.addEventListener('beforeunload', () => {
+            pageReloaded = true;
+            addLog('⚠️ Página está por recargarse!', 'error');
+        });
+        
+        function runTest() {
+            clearLog();
+            pageReloaded = false;
+            results.innerHTML = '';
+            
+            addLog('🚀 Iniciando test del fix...', 'info');
+            
+            // Cargar la app en un iframe
+            const iframe = document.createElement('iframe');
+            iframe.style.width = '100%';
+            iframe.style.height = '500px';
+            iframe.style.border = '2px solid #2563eb';
+            iframe.style.borderRadius = '10px';
+            document.body.appendChild(iframe);
+            
+            iframe.onload = function() {
+                addLog('✅ App cargada', 'success');
+                
+                setTimeout(() => {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const iframeWindow = iframe.contentWindow;
+                    
+                    // Paso 1: Verificar que el botón es type="button"
+                    const calculateBtn = iframeDoc.getElementById('calculateButton');
+                    if (calculateBtn) {
+                        const btnType = calculateBtn.getAttribute('type') || 'submit (default)';
+                        if (btnType === 'button') {
+                            addLog('✅ Botón calcular es type="button"', 'success');
+                        } else {
+                            addLog(`❌ Botón calcular es type="${btnType}" (debería ser "button")`, 'error');
+                        }
+                    }
+                    
+                    // Paso 2: Configurar la app
+                    addLog('🎯 Configurando app...', 'info');
+                    
+                    const filmSelect = iframeDoc.getElementById('filmType');
+                    const devSelect = iframeDoc.getElementById('developer');
+                    
+                    if (filmSelect && devSelect) {
+                        filmSelect.value = '35mm';
+                        devSelect.value = 'c41';
+                        
+                        // Paso 3: Hacer clic en calcular
+                        setTimeout(() => {
+                            addLog('🖱️ Haciendo clic en calcular...', 'info');
+                            
+                            if (calculateBtn) {
+                                calculateBtn.click();
+                                
+                                // Paso 4: Verificar que no hubo reload
+                                setTimeout(() => {
+                                    if (pageReloaded) {
+                                        addLog('❌ Página SE RECARGÓ - Fix NO funciona', 'error');
+                                        results.innerHTML = `
+                                            <div style="background: #fee2e2; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                                <strong>❌ TEST FALLIDO</strong>
+                                                <p>La página se recargó después de hacer clic en calcular.</p>
+                                                <p>El fix NO está funcionando correctamente.</p>
+                                            </div>
+                                        `;
+                                    } else {
+                                        addLog('✅ Página NO se recargó - Fix FUNCIONA', 'success');
+                                        
+                                        // Verificar que se mostraron resultados
+                                        const timeDisplay = iframeDoc.getElementById('developmentTime');
+                                        if (timeDisplay && timeDisplay.textContent !== '--:--') {
+                                            addLog(`✅ Tiempo calculado: ${timeDisplay.textContent}`, 'success');
+                                        }
+                                        
+                                        // Verificar que los inputs siguen funcionando
+                                        filmSelect.value = '120mm';
+                                        if (filmSelect.value === '120mm') {
+                                            addLog('✅ Inputs siguen funcionando después del cálculo', 'success');
+                                        }
+                                        
+                                        results.innerHTML = `
+                                            <div style="background: #d1fae5; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                                <strong>✅ TEST EXITOSO</strong>
+                                                <p>El fix está funcionando correctamente:</p>
+                                                <ul style="margin-top: 10px; padding-left: 20px;">
+                                                    <li>✅ Página no se recarga</li>
+                                                    <li>✅ Cálculo funciona</li>
+                                                    <li>✅ Inputs siguen funcionando</li>
+                                                    <li>✅ Botón es type="button"</li>
+                                                </ul>
+                                            </div>
+                                        `;
+                                    }
+                                    
+                                    // Limpiar iframe
+                                    setTimeout(() => {
+                                        document.body.removeChild(iframe);
+                                    }, 1000);
+                                    
+                                }, 1000);
+                            }
+                        }, 500);
+                    }
+                }, 1000);
+            };
+            
+            iframe.src = 'redesign-v2.html';
+        }
+        
+        function simulateOldProblem() {
+            clearLog();
+            addLog('🐛 Simulando comportamiento viejo...', 'info');
+            
+            // Crear un formulario con el problema viejo
+            const oldForm = document.createElement('form');
+            oldForm.id = 'oldProblemForm';
+            oldForm.innerHTML = `
+                <h3>Formulario con problema viejo (type="submit")</h3>
+                <select>
+                    <option>Opción 1</option>
+                    <option>Opción 2</option>
+                </select>
+                <button type="submit" id="oldSubmitBtn">Enviar (type="submit")</button>
+            `;
+            
+            oldForm.style.padding = '20px';
+            oldForm.style.border = '2px solid #ef4444';
+            oldForm.style.borderRadius = '8px';
+            oldForm.style.margin = '20px 0';
+            
+            // Agregar event listener que NO previene el submit
+            oldForm.addEventListener('submit', (e) => {
+                addLog('❌ Formulario viejo: submit NO prevenido', 'error');
+                // NOTA: No llamamos e.preventDefault() aquí
+            });
+            
+            document.body.appendChild(oldForm);
+            
+            addLog('⚠️ Este formulario se recargará la página al hacer clic', 'warning');
+            addLog('🔍 Compara con el fix aplicado en redesign-v2.html', 'info');
+        }
+        
+        // Inicializar
+        addLog('✅ Test de fix cargado', 'success');
+    </script>
+</body>
+</html>

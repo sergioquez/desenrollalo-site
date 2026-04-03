@@ -122,10 +122,18 @@ class FilmDevelopmentApp {
             }
         });
 
+        // Prevenir submit del formulario (doble protección)
         this.calculatorForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
             this.calculateDevelopmentTime();
+            return false;
         });
+        
+        // También prevenir cualquier envío por otros medios
+        this.calculatorForm.setAttribute('novalidate', 'novalidate');
+        this.calculatorForm.action = 'javascript:void(0);';
 
         // Sistema de químicos
         this.updateChemicalsBtn.addEventListener('click', () => {
