@@ -123,15 +123,21 @@ class FilmDevelopmentApp {
         });
 
         // Prevenir submit del formulario (doble protección)
+        // El botón ahora es type="button", necesita event listener de click
+        this.calculateButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.calculateDevelopmentTime();
+        });
+        
+        // También mantener el listener del formulario por si acaso
         this.calculatorForm.addEventListener('submit', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            e.stopImmediatePropagation();
             this.calculateDevelopmentTime();
             return false;
         });
         
-        // También prevenir cualquier envío por otros medios
+        // Prevenir cualquier envío por otros medios
         this.calculatorForm.setAttribute('novalidate', 'novalidate');
         this.calculatorForm.action = 'javascript:void(0);';
 

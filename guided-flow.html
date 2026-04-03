@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>🎞️ Desenrollalo - Guía Paso a Paso</title>
+    <style>
+        /* Variables CSS - Sistema simple */
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --radius: 12px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #111827;
+                --bg-secondary: #1f2937;
+                --text-primary: #f9fafb;
+                --text-secondary: #d1d5db;
+                --border: #374151;
+            }
+        }
+        
+        /* Reset y base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-sans); background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        
+        /* Contenedor principal */
+        .app-container {
+            max-width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .app-header {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        /* Carrusel de pasos */
+        .carousel-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Progress bar */
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Paso del carrusel */
+        .carousel-step {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .step-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Opciones de selección */
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .option-card {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .option-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .option-card.selected {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+        
+        .option-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+        
+        .option-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        /* Controles de número */
+        .number-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .number-button {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            background: var(--bg-primary);
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .number-button:hover:not(:disabled) {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .number-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .number-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+            color: var(--text-primary);
+        }
+        
+        .number-label {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        /* Resultados */
+        .results-card {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: var(--radius);
+            padding: 2rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .results-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+        
+        .results-value {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .results-unit {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .detail-card {
+            background: var(--bg-primary);
+            border-radius: calc(var(--radius) - 4px);
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .detail-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        /* Controles de navegación */
+        .navigation-controls {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            position: sticky;
+            bottom: 0;
+        }
+        
+        .nav-button {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-button.primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .nav-button.primary:hover:not(:disabled) {
+            background: var(--primary-light);
+        }
+        
+        .nav-button.secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .nav-button.secondary:hover:not(:disabled) {
+            background: var(--bg-secondary);
+        }
+        
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Footer */
+        .app-footer {
+            text-align: center;
+            padding: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .carousel-step {
+                padding: 1.5rem;
+            }
+            
+            .step-title {
+                font-size: 1.25rem;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .navigation-controls {
+                flex-direction: column;
+            }
+            
+            .results-value {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Estados especiales */
+        .temperature-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .chemicals-display {
+            background: var(--bg-primary);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+        }
+        
+        .chemical-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .chemical-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .chemical-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .chemical-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .chemical-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .chemical-info {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <span>🎞️</span>
+                <span>Desenrollalo</span>
+            </div>
+        </header>
+        
+        <!-- Carrusel principal -->
+        <main class="carousel-container">
+            <!-- Progress bar -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="currentStep">Paso 1 de 6</span>
+                    <span id="stepTitle">Bienvenida</span>
+                </div>
+            </div>
+            
+            <!-- Contenedor de pasos (se llena dinámicamente) -->
+            <div class="carousel-step" id="stepContainer">
+                <!-- Se llenará con JavaScript -->
+            </div>
+        </main>
+        
+        <!-- Controles de navegación -->
+        <div class="navigation-controls">
+            <button class="nav-button secondary" id="prevButton" disabled>
+                <span>←</span>
+                Atrás
+            </button>
+            <button class="nav-button primary" id="nextButton">
+                Siguiente
+                <span>→</span>
+            </button>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>🎞️ <strong>Desenrollalo</strong> - Guía de revelado fotográfico paso a paso</p>
+            <p style="margin-top: 0.25rem; font-size: 0.75rem;">
+                Diseñado para principiantes • Instrucciones claras • Sin complicaciones
+            </p>
+        </footer>
+    </div>
+    
+    <script>
+        // Aplicación de flujo guiado
+        class GuidedFlowApp {
+            constructor() {
+                this.state = {
+                    currentStep: 0,
+                    filmType: null,
+                    developer: null,
+                    rolls: 1,
+                    chemicalsUsed: 0,
+                    steps: this.createSteps()
+                };
+                
+                // Constantes
+                this.DEVELOPMENT_TIMES = {
+                    '35mm': { 'c41': 15, 'd76': 10 },
+                    '120mm': { 'c41': 20, 'd76': 12 }
+                };
+                
+                this.CHEMICAL_CAPACITY = {
+                    'c41': { developer: 12, blix: 12, stabilizer: 50 },
+                    'd76': { developerStock: 10, developer1to1: 4, fixer: 30, stopBath: 50 }
+                };
+                
+                this.init();
+            }
+            
+            createSteps() {
+                return [
+                    {
+                        id: 'welcome',
+                        title: '🎯 ¡Bienvenido a Desenrollalo!',
+                        description: 'Te guiaremos paso a paso para revelar tu película fotográfica. Solo necesitas seguir las instrucciones.',
+                        icon: '🎯',
+                        type: 'welcome'
+                    },
+                    {
+                        id: 'filmType',
+                        title: '📷 ¿Qué tipo de película tienes?',
+                        description: 'Selecciona el formato de tu película. Esto afecta los tiempos de revelado.',
+                        icon: '📷',
+                        type: 'choice',
+                        options: [
+                            {
+                                id: '35mm',
+                                title: '35mm',
+                                description: 'Formato estándar (la más común)',
+                                icon: '🎞️'
+                            },
+                            {
+                                id: '120mm',
+                                title: '120mm',
+                                description: 'Medio formato (más grande, mejor calidad)',
+                                icon: '🖼️'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'developer',
+                        title: '🧪 ¿Qué proceso usarás?',
+                        description: 'Elige el tipo de revelado según tu película.',
+                        icon: '🧪',
+                        type: 'choice',
+                        options: [
+                            {
+                                id: 'c41',
+                                title: 'C-41 (Color)',
+                                description: 'Para película color • Temperatura crítica: 39°C',
+                                icon: '🌈',
+                                details: 'Proceso preciso. Necesita temperatura exacta de 39°C ± 0.3°C'
+                            },
+                            {
+                                id: 'd76',
+                                title: 'D-76 (Blanco y Negro)',
+                                description: 'Para película B&W • Temperatura flexible: 20°C',
+                                icon: '⚫',
+                                details: 'Proceso más tolerante. Temperatura ideal: 20°C (18-24°C aceptable)'
+                            }
+                        ]
+                    },
+                    {
+                        id: 'rolls',
+                        title: '🎞️ ¿Cuántos rollos vas a revelar?',
+                        description: 'Cada rollo adicional agrega 30 segundos al tiempo total.',
+                        icon: '🎞️',
+                        type: 'number',
+                        min: 1,
+                        max: 10,
+                        defaultValue: 1
+                    },
+                    {
+                        id: 'chemicals',
+                        title: '⚗️ Estado de tus químicos',
+                        description: '¿Cuántos rollos has revelado ya con estos químicos?',
+                        icon: '⚗️',
+                        type: 'chemicals',
+                        showIf: () => this.state.developer !== null
+                    },
+                    {
+                        id: 'results',
+                        title: '📊 ¡Listo para revelar!',
+                        description: 'Aquí tienes todos los tiempos y detalles para tu revelado.',
+                        icon: '📊',
+                        type: 'results'
+                    }
+                ];
+            }
+            
+            init() {
+                this.cacheElements();
+                this.bindEvents();
+                this.showStep(0);
+            }
+            
+            cacheElements() {
+                this.stepContainer = document.getElementById('stepContainer');
+                this.progressFill = document.getElementById('progressFill');
+                this.currentStepSpan = document.getElementById('currentStep');
+                this.stepTitleSpan = document.getElementById('stepTitle');
+                this.prevButton = document.getElementById('prevButton');
+                this.nextButton = document.getElementById('nextButton');
+            }
+            
+            bindEvents() {
+                this.prevButton.addEventListener('click', () => this.prevStep());
+                this.nextButton.addEventListener('click', () => this.nextStep());
+            }
+            
+            showStep(stepIndex) {
+                if (stepIndex < 0 || stepIndex >= this.state.steps.length) return;
+                
+                this.state.currentStep = stepIndex;
+                const step = this.state.steps[stepIndex];
+                
+                // Actualizar progress bar
+                const progress = ((stepIndex + 1) / this.state.steps.length) * 100;
+                this.progressFill.style.width = `${progress}%`;
+                this.currentStepSpan.textContent = `Paso ${stepIndex + 1} de ${this.state.steps.length}`;
+                this.stepTitleSpan.textContent = step.title.replace(/^[^ ]+ /, '');
+                
+                // Renderizar el paso
+                this.renderStep(step);
+                
+                // Actualizar botones
+                this.prevButton.disabled = stepIndex === 0;
+                
+                // Cambiar texto del botón next en último paso
+                if (stepIndex === this.state.steps.length - 1) {
+                    this.nextButton.innerHTML = '<span>🎉 Comenzar Revelado</span> <span>🚀</span>';
+                } else {
+                    this.nextButton.innerHTML = 'Siguiente <span>→</span>';
+                }
+            }
+            
+            renderStep(step) {
+                let html = '';
+                
+                switch(step.type) {
+                    case 'welcome':
+                        html = this.renderWelcomeStep(step);
+                        break;
+                    case 'choice':
+                        html = this.renderChoiceStep(step);
+                        break;
+                    case 'number':
+                        html = this.renderNumberStep(step);
+                        break;
+                    case 'chemicals':
+                        html = this.renderChemicalsStep(step);
+                        break;
+                    case 'results':
+                        html = this.renderResultsStep(step);
+                        break;
+                }
+                
+                this.stepContainer.innerHTML = html;
+                
+                // Agregar event listeners específicos
+                setTimeout(() => this.bindStepEvents(step), 10);
+            }
+            
+            renderWelcomeStep(step) {
+                return `
+                    <div class="step-header">
+                        <span class="step-icon">${step.icon}</span>
+                        <h2 class="step-title">${step.title}</h2>
+                        <p class="step-description">${step.description}</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                            <strong>¿Listo para comenzar?</strong><br>
+                            Solo necesitarás 2 minutos para configurar todo.
+                        </p>
+                    </div>
+                `;
+            }
+            
+            renderChoiceStep(step) {
+                const options = step.options.map(option => {
+                    const isSelected = this.state[step.id] === option.id;
+                    const selectedClass = isSelected ? 'selected' : '';
+                    
+                    return `
+                        <div class="option-card ${selectedClass}" data-value="${option.id}">
+                            <span class="option-icon">${option.icon}</span>
+                            <div class="option-title">${option.title}</div>
+                            <div class="option-description">${option.description}</div>
+                            ${option.details ? `<div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--accent);">${option.details}</div>` : ''}
+                        </div>
+                    `;
+                }).join('');
+                
+                return `
+                    <div class="step-header">
+                        <span class="step-icon">${step.icon}</span>
+                        <h2 class="step-title">${step.title}</h2>
+                        <p class="step-description">${step.description}</p>
+                    </div>
+                    <div class="options-grid">
+                        ${options}
+                    </div>
+                `;
+            }
+            
+            renderNumberStep(step) {
+                const currentValue = this.state[step.id] || step.defaultValue;
+                
+                return `
+                    <div class="step-header">
+                        <span class="step-icon">${step.icon}</span>
+                        <h2 class="step-title">${step.title}</h2>
+                        <p class="step-description">${step.description}</p>
+                    </div>
+                    <div class="number-control">
+                        <button class="number-button" id="decreaseButton" ${currentValue <= step.min ? 'disabled' : ''}>-</button>
+                        <div class="number-display" id="numberDisplay">${currentValue}</div>
+                        <button class="number-button" id="increaseButton" ${currentValue >= step.max ? 'disabled' : ''}>+</button>
+                    </div>
+                    <div class="number-label" id="numberLabel">
+                        ${currentValue === 1 ? '1 rollo' : `${currentValue} rollos`}
+                        ${currentValue > 1 ? '<span style="color: var(--accent); display: block; margin-top: 0.25rem; font-size: 0.875rem;">(+30 segundos por cada rollo extra)</span>' : ''}
+                    </div>
+                `;
+            }
+            
+            renderChemicalsStep(step) {
+                if (!step.showIf || !step.showIf()) {
+                    return this.renderSkipStep(step);
+                }
+                
+                const capacity = this.calculateChemicalCapacity();
+                const remainingRolls = this.state.developer === 'c41' 
+                    ? Math.min(capacity.developer, capacity.blix, capacity.stabilizer)
+                    : Math.min(capacity.developerStock, capacity.fixer, capacity.stopBath);
+                
+                return `
+                    <div class="step-header">
+                        <span class="step-icon">${step.icon}</span>
+                        <h2 class="step-title">${step.title}</h2>
+                        <p class="step-description">${step.description}</p>
+                    </div>
+                    <div class="chemicals-display">
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary);">
+                                Rollos ya revelados con estos químicos:
+                            </label>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <input type="number" id="chemicalsInput" 
+                                       value="${this.state.chemicalsUsed}"
+                                       min="0" max="50"
+                                       style="flex: 1; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+                                <button id="updateChemicals" style="padding: 0.75rem 1rem; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                    Actualizar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <div style="font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);">
+                                Capacidad restante:
+                            </div>
+                            ${this.renderChemicalBars()}
+                        </div>
+                        
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                <strong>🧪 Puedes revelar:</strong> ${remainingRolls} rollos más
+                            </div>
+                            ${remainingRolls < 3 ? '<div style="margin-top: 0.5rem; color: var(--accent); font-size: 0.75rem;">⚠️ Químicos cerca de agotarse</div>' : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            renderSkipStep(step) {
+                return `
+                    <div class="step-header">
+                        <span class="step-icon">${step.icon}</span>
+                        <h2 class="step-title">${step.title}</h2>
+                        <p class="step-description">Este paso no aplica para tu selección. Puedes continuar.</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem; padding: 2rem; background: var(--bg-primary); border-radius: var(--radius); border: 1px solid var(--border);">
+                        <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">⏭️</span>
+                        <p style="color: var(--text-secondary);">
+                            Continuando al siguiente paso...
+                        </p>
+                    </div>
+                `;
+            }
+            
+            renderResultsStep(step) {
+                const results = this.calculateResults();
+                
+                return `
+                    <div class="step-header">
+                        <span class="step-icon">${step.icon}</span>
+                        <h2 class="step-title">${step.title}</h2>
+                        <p class="step-description">${step.description}</p>
+                    </div>
+                    
+                    <div class="results-card">
+                        <div class="results-label">Tiempo de Desarrollo</div>
+                        <div class="results-value">${results.time}</div>
+                        <div class="results-unit">${results.unit}</div>
+                    </div>
+                    
+                    <div class="details-grid">
+                        <div class="detail-card">
+                            <div class="detail-label">Proceso</div>
+                            <div class="detail-value">${results.process}</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Película</div>
+                            <div class="detail-value">${results.film}</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Rollos</div>
+                            <div class="detail-value">${results.rolls}</div>
+                        </div>
+                        <div class="detail-card">
+                            <div class="detail-label">Temperatura</div>
+                            <div class="detail-value">${results.temperature}</div>
+                        </div>
+                    </div>
+                    
+                    ${this.state.developer === 'c41' ? `
+                        <div class="temperature-warning">
+                            <strong>🌡️ Importante para C-41:</strong><br>
+                            Mantén la temperatura exacta en 39°C ± 0.3°C durante TODO el proceso.
+                        </div>
+                    ` : ''}
+                    
+                    <div class="chemicals-display" style="margin-top: 2rem;">
+                        <div style="font-weight: 600; margin-bottom: 1rem; color: var(--text-primary);">
+                            🧪 Estado de químicos después de este revelado:
+                        </div>
+                        ${this.renderChemicalBars()}
+                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(37, 99, 235, 0.1); border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                                <strong>📝 Registrar uso:</strong> ${this.state.rolls} rollo${this.state.rolls > 1 ? 's' : ''}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem; padding: 1.5rem; background: var(--bg-primary); border-radius: var(--radius); border: 1px solid var(--border);">
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                            <strong>🎯 ¿Listo para comenzar?</strong><br>
+                            Tienes toda la información necesaria.
+                        </p>
+                        <button id="startProcess" style="padding: 1rem 2rem; background: var(--secondary); color: white; border: none; border-radius: var(--radius); font-weight: 600; cursor: pointer; font-size: 1rem;">
+                            🚀 Iniciar Guía de Revelado Paso a Paso
+                        </button>
+                    </div>
+                `;
+            }
+            
+            renderChemicalBars() {
+                const capacity = this.calculateChemicalCapacity();
+                
+                if (this.state.developer === 'c41') {
+                    return `
+                        <div class="chemical-item">
+                            <div class="chemical-name">Developer C-41</div>
+                            <div class="chemical-bar">
+                                <div class="chemical-fill" style="width: ${(capacity.developer / 12) * 100}%"></div>
+                            </div>
+                            <div class="chemical-info">${capacity.developer} de 12 rollos restantes</div>
+                        </div>
+                        <div class="chemical-item">
+                            <div class="chemical-name">Blix</div>
+                            <div class="chemical-bar">
+                                <div class="chemical-fill" style="width: ${(capacity.blix / 12) * 100}%"></div>
+                            </div>
+                            <div class="chemical-info">${capacity.blix} de 12 rollos restantes</div>
+                        </div>
+                        <div class="chemical-item">
+                            <div class="chemical-name">Stabilizer</div>
+                            <div class="chemical-bar">
+                                <div class="chemical-fill" style="width: ${(capacity.stabilizer / 50) * 100}%"></div>
+                            </div>
+                            <div class="chemical-info">${capacity.stabilizer} de 50 rollos restantes</div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="chemical-item">
+                            <div class="chemical-name">Developer D-76 (stock)</div>
+                            <div class="chemical-bar">
+                                <div class="chemical-fill" style="width: ${(capacity.developerStock / 10) * 100}%"></div>
+                            </div>
+                            <div class="chemical-info">${capacity.developerStock} de 10 rollos restantes</div>
+                        </div>
+                        <div class="chemical-item">
+                            <div class="chemical-name">Fixer</div>
+                            <div class="chemical-bar">
+                                <div class="chemical-fill" style="width: ${(capacity.fixer / 30) * 100}%"></div>
+                            </div>
+                            <div class="chemical-info">${capacity.fixer} de 30 rollos restantes</div>
+                        </div>
+                        <div class="chemical-item">
+                            <div class="chemical-name">Stop Bath</div>
+                            <div class="chemical-bar">
+                                <div class="chemical-fill" style="width: ${(capacity.stopBath / 50) * 100}%"></div>
+                            </div>
+                            <div class="chemical-info">${capacity.stopBath} de 50 rollos restantes</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            bindStepEvents(step) {
+                switch(step.type) {
+                    case 'choice':
+                        this.bindChoiceEvents(step);
+                        break;
+                    case 'number':
+                        this.bindNumberEvents(step);
+                        break;
+                    case 'chemicals':
+                        this.bindChemicalsEvents(step);
+                        break;
+                    case 'results':
+                        this.bindResultsEvents(step);
+                        break;
+                }
+            }
+            
+            bindChoiceEvents(step) {
+                const optionCards = this.stepContainer.querySelectorAll('.option-card');
+                optionCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        // Remover selección anterior
+                        optionCards.forEach(c => c.classList.remove('selected'));
+                        
+                        // Agregar selección nueva
+                        card.classList.add('selected');
+                        
+                        // Guardar valor
+                        const value = card.dataset.value;
+                        this.state[step.id] = value;
+                        
+                        // Si es filmType o developer, actualizar estado
+                        if (step.id === 'filmType') this.state.filmType = value;
+                        if (step.id === 'developer') this.state.developer = value;
+                        
+                        // Habilitar next button
+                        this.nextButton.disabled = false;
+                    });
+                });
+                
+                // Si ya hay un valor seleccionado, marcar la opción
+                if (this.state[step.id]) {
+                    const selectedCard = this.stepContainer.querySelector(`[data-value="${this.state[step.id]}"]`);
+                    if (selectedCard) {
+                        selectedCard.classList.add('selected');
+                        this.nextButton.disabled = false;
+                    }
+                } else {
+                    this.nextButton.disabled = true;
+                }
+            }
+            
+            bindNumberEvents(step) {
+                const decreaseBtn = document.getElementById('decreaseButton');
+                const increaseBtn = document.getElementById('increaseButton');
+                const numberDisplay = document.getElementById('numberDisplay');
+                const numberLabel = document.getElementById('numberLabel');
+                
+                const updateDisplay = () => {
+                    numberDisplay.textContent = this.state.rolls;
+                    numberLabel.innerHTML = `
+                        ${this.state.rolls === 1 ? '1 rollo' : `${this.state.rolls} rollos`}
+                        ${this.state.rolls > 1 ? '<span style="color: var(--accent); display: block; margin-top: 0.25rem; font-size: 0.875rem;">(+30 segundos por cada rollo extra)</span>' : ''}
+                    `;
+                    
+                    decreaseBtn.disabled = this.state.rolls <= step.min;
+                    increaseBtn.disabled = this.state.rolls >= step.max;
+                };
+                
+                decreaseBtn.addEventListener('click', () => {
+                    if (this.state.rolls > step.min) {
+                        this.state.rolls--;
+                        updateDisplay();
+                    }
+                });
+                
+                increaseBtn.addEventListener('click', () => {
+                    if (this.state.rolls < step.max) {
+                        this.state.rolls++;
+                        updateDisplay();
+                    }
+                });
+                
+                updateDisplay();
+            }
+            
+            bindChemicalsEvents(step) {
+                const chemicalsInput = document.getElementById('chemicalsInput');
+                const updateButton = document.getElementById('updateChemicals');
+                
+                if (chemicalsInput && updateButton) {
+                    updateButton.addEventListener('click', () => {
+                        const value = parseInt(chemicalsInput.value) || 0;
+                        this.state.chemicalsUsed = Math.max(0, Math.min(50, value));
+                        
+                        // Recargar el paso para actualizar las barras
+                        this.renderStep(step);
+                        setTimeout(() => this.bindStepEvents(step), 10);
+                    });
+                    
+                    chemicalsInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            updateButton.click();
+                        }
+                    });
+                }
+            }
+            
+            bindResultsEvents(step) {
+                const startButton = document.getElementById('startProcess');
+                if (startButton) {
+                    startButton.addEventListener('click', () => {
+                        // Aquí podríamos iniciar el carrusel de revelado paso a paso
+                        alert('🚀 ¡Listo para comenzar el revelado!\n\nEn una versión completa, aquí se abriría el carrusel de pasos del proceso de revelado con timer y agitación específica.');
+                    });
+                }
+            }
+            
+            calculateChemicalCapacity() {
+                if (this.state.developer === 'c41') {
+                    return {
+                        developer: Math.max(0, this.CHEMICAL_CAPACITY.c41.developer - this.state.chemicalsUsed),
+                        blix: Math.max(0, this.CHEMICAL_CAPACITY.c41.blix - this.state.chemicalsUsed),
+                        stabilizer: Math.max(0, this.CHEMICAL_CAPACITY.c41.stabilizer - this.state.chemicalsUsed)
+                    };
+                } else {
+                    return {
+                        developerStock: Math.max(0, this.CHEMICAL_CAPACITY.d76.developerStock - this.state.chemicalsUsed),
+                        developer1to1: this.CHEMICAL_CAPACITY.d76.developer1to1,
+                        fixer: Math.max(0, this.CHEMICAL_CAPACITY.d76.fixer - this.state.chemicalsUsed),
+                        stopBath: Math.max(0, this.CHEMICAL_CAPACITY.d76.stopBath - this.state.chemicalsUsed)
+                    };
+                }
+            }
+            
+            calculateResults() {
+                if (!this.state.filmType || !this.state.developer) {
+                    return {
+                        time: '--:--',
+                        unit: 'minutos',
+                        process: 'No seleccionado',
+                        film: 'No seleccionado',
+                        rolls: 'No seleccionado',
+                        temperature: 'No aplica'
+                    };
+                }
+                
+                // Calcular tiempo en segundos
+                const devTimeMinutes = this.DEVELOPMENT_TIMES[this.state.filmType][this.state.developer];
+                const devTimeSeconds = devTimeMinutes * 60;
+                const additionalTime = (this.state.rolls - 1) * 30;
+                const totalSeconds = devTimeSeconds + additionalTime;
+                
+                // Formatear tiempo
+                const totalMinutes = Math.floor(totalSeconds / 60);
+                const remainingSeconds = totalSeconds % 60;
+                const timeString = `${totalMinutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+                
+                // Información del proceso
+                const processName = this.state.developer === 'c41' ? 'C-41 (Color)' : 'D-76 (B&W)';
+                const filmName = this.state.filmType === '35mm' ? '35mm' : '120mm';
+                const rollsText = this.state.rolls === 1 ? '1 rollo' : `${this.state.rolls} rollos`;
+                const temperature = this.state.developer === 'c41' ? '39°C ± 0.3°C' : '20°C ideal (18-24°C)';
+                
+                return {
+                    time: timeString,
+                    unit: totalMinutes === 1 ? 'minuto' : 'minutos',
+                    process: processName,
+                    film: filmName,
+                    rolls: rollsText,
+                    temperature: temperature
+                };
+            }
+            
+            prevStep() {
+                if (this.state.currentStep > 0) {
+                    this.showStep(this.state.currentStep - 1);
+                }
+            }
+            
+            nextStep() {
+                const currentStep = this.state.steps[this.state.currentStep];
+                
+                // Validar que se haya seleccionado algo en pasos de choice
+                if (currentStep.type === 'choice' && !this.state[currentStep.id]) {
+                    alert('Por favor, selecciona una opción antes de continuar.');
+                    return;
+                }
+                
+                // Saltar paso de químicos si no aplica
+                if (currentStep.id === 'chemicals' && (!currentStep.showIf || !currentStep.showIf())) {
+                    this.showStep(this.state.currentStep + 1);
+                    return;
+                }
+                
+                // Si es el último paso, reiniciar o iniciar proceso
+                if (this.state.currentStep === this.state.steps.length - 1) {
+                    if (confirm('¿Quieres comenzar de nuevo con una nueva configuración?')) {
+                        this.state = {
+                            currentStep: 0,
+                            filmType: null,
+                            developer: null,
+                            rolls: 1,
+                            chemicalsUsed: 0,
+                            steps: this.state.steps
+                        };
+                        this.showStep(0);
+                    }
+                    return;
+                }
+                
+                // Avanzar al siguiente paso
+                this.showStep(this.state.currentStep + 1);
+            }
+        }
+        
+        // Inicializar la aplicación cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            window.guidedFlowApp = new GuidedFlowApp();
+            
+            // Configurar tema automático
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                document.documentElement.style.setProperty('color-scheme', 'dark');
+            }
+            
+            console.log('🎞️ Guided Flow App inicializada');
+        });
+    </script>
+</body>
+</html>
