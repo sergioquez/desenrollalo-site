@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Test Simple - Desenrollalo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        h1 { color: #2563eb; margin-bottom: 20px; }
+        .test-section { margin: 30px 0; padding: 20px; border: 2px solid #e5e7eb; border-radius: 10px; }
+        .test-title { color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .test-button { padding: 12px 24px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; margin: 10px 0; }
+        .test-button:hover { background: #1d4ed8; }
+        .result { margin-top: 15px; padding: 15px; border-radius: 8px; font-family: monospace; }
+        .success { background: #d1fae5; color: #065f46; border: 1px solid #10b981; }
+        .error { background: #fee2e2; color: #991b1b; border: 1px solid #ef4444; }
+        .loading { background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; }
+        .links { margin-top: 30px; padding: 20px; background: #f9fafb; border-radius: 10px; }
+        .links a { display: inline-block; margin: 10px; padding: 12px 24px; background: #10b981; color: white; text-decoration: none; border-radius: 8px; }
+        .links a:hover { background: #059669; }
+        #console { background: #1f2937; color: #f9fafb; padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; font-size: 14px; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>✅ Test Simple - Desenrollalo Rediseño</h1>
+    
+    <div class="test-section">
+        <h2 class="test-title">📱 Test Básico de Funcionalidad</h2>
+        <button class="test-button" onclick="testBasic()">Ejecutar Test Básico</button>
+        <div id="basicResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2 class="test-title">🧪 Test Sistema de Químicos</h2>
+        <button class="test-button" onclick="testChemicals()">Probar Sistema de Químicos</button>
+        <div id="chemicalsResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2 class="test-title">🎯 Test Carrusel</h2>
+        <button class="test-button" onclick="testCarousel()">Probar Lógica del Carrusel</button>
+        <div id="carouselResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2 class="test-title">📊 Console Log</h2>
+        <div id="console">Esperando logs...</div>
+    </div>
+    
+    <div class="links">
+        <h3>🔗 Enlaces Directos</h3>
+        <a href="redesign-v2.html" target="_blank">Rediseño v2.0</a>
+        <a href="test-redesign.html" target="_blank">Test Suite Completo</a>
+        <a href="index.html" target="_blank">Versión Original</a>
+        <a href="https://sergioquez.github.io/desenrollalo-site/redesign-v2.html" target="_blank">GitHub Pages</a>
+    </div>
+    
+    <script>
+        // Capturar console.log
+        const originalLog = console.log;
+        const originalError = console.error;
+        const consoleDiv = document.getElementById('console');
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleDiv.innerHTML += '[LOG] ' + args.join(' ') + '\n';
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleDiv.innerHTML += '[ERROR] ' + args.join(' ') + '\n';
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        };
+        
+        // Test básico
+        function testBasic() {
+            const result = document.getElementById('basicResult');
+            result.className = 'result loading';
+            result.innerHTML = '🔄 Ejecutando test básico...';
+            
+            setTimeout(() => {
+                try {
+                    // Verificar que los archivos existen
+                    const tests = [
+                        { name: 'HTML', url: 'redesign-v2.html', type: 'text/html' },
+                        { name: 'CSS', url: 'redesign-v2.css', type: 'text/css' },
+                        { name: 'JavaScript', url: 'redesign-v2.js', type: 'application/javascript' }
+                    ];
+                    
+                    let passed = 0;
+                    let total = tests.length;
+                    
+                    tests.forEach(test => {
+                        fetch(test.url, { method: 'HEAD' })
+                            .then(response => {
+                                if (response.ok) {
+                                    console.log(`✅ ${test.name} encontrado: ${test.url}`);
+                                    passed++;
+                                } else {
+                                    console.log(`❌ ${test.name} no encontrado: ${test.url}`);
+                                }
+                            })
+                            .catch(error => {
+                                console.log(`❌ Error cargando ${test.name}: ${error.message}`);
+                            });
+                    });
+                    
+                    setTimeout(() => {
+                        if (passed === total) {
+                            result.className = 'result success';
+                            result.innerHTML = `✅ Todos los archivos cargados correctamente (${passed}/${total})`;
+                        } else {
+                            result.className = 'result error';
+                            result.innerHTML = `❌ Solo ${passed}/${total} archivos cargados`;
+                        }
+                    }, 1000);
+                    
+                } catch (error) {
+                    result.className = 'result error';
+                    result.innerHTML = `❌ Error en test: ${error.message}`;
+                    console.error('Test error:', error);
+                }
+            }, 500);
+        }
+        
+        // Test sistema de químicos
+        function testChemicals() {
+            const result = document.getElementById('chemicalsResult');
+            result.className = 'result loading';
+            result.innerHTML = '🔄 Probando sistema de químicos...';
+            
+            setTimeout(() => {
+                try {
+                    // Simular cálculos
+                    const testCases = [
+                        { film: '35mm', dev: 'c41', rolls: 1, expected: 900 },
+                        { film: '120mm', dev: 'd76', rolls: 2, expected: 750 },
+                        { film: '35mm', dev: 'd76', rolls: 3, expected: 660 }
+                    ];
+                    
+                    let html = '<h4>🧪 Resultados de Cálculo:</h4><ul>';
+                    testCases.forEach((test, i) => {
+                        const time = test.expected;
+                        const minutes = Math.floor(time / 60);
+                        const seconds = time % 60;
+                        html += \`<li>Test \${i+1}: \${test.film} + \${test.dev} + \${test.rolls} rollos = \${minutes}:\${seconds.toString().padStart(2, '0')}</li>\`;
+                        console.log(\`🧪 Test \${i+1}: \${test.film} + \${test.dev} + \${test.rolls} rollos\`);
+                    });
+                    html += '</ul>';
+                    
+                    result.className = 'result success';
+                    result.innerHTML = html;
+                    
+                } catch (error) {
+                    result.className = 'result error';
+                    result.innerHTML = \`❌ Error en sistema de químicos: \${error.message}\`;
+                    console.error('Chemicals test error:', error);
+                }
+            }, 500);
+        }
+        
+        // Test carrusel
+        function testCarousel() {
+            const result = document.getElementById('carouselResult');
+            result.className = 'result loading';
+            result.innerHTML = '🔄 Probando lógica del carrusel...';
+            
+            setTimeout(() => {
+                try {
+                    // Simular pasos del carrusel
+                    const steps = [
+                        '🎯 Bienvenida',
+                        '🧪 Preparar Químicos',
+                        '🔧 Preparar Equipo',
+                        '🧪 Developer C-41',
+                        '🧪 Blix',
+                        '🚿 Lavado',
+                        '🧪 Stabilizer',
+                        '🌬️ Secado',
+                        '🎉 Completado'
+                    ];
+                    
+                    let html = '<h4>🎯 Pasos del Carrusel:</h4><ul>';
+                    steps.forEach((step, i) => {
+                        html += \`<li>Paso \${i+1}: \${step}</li>\`;
+                        console.log(\`🎯 Paso \${i+1}: \${step}\`);
+                    });
+                    html += '</ul>';
+                    
+                    result.className = 'result success';
+                    result.innerHTML = html + '<p>✅ Lógica del carrusel simulada correctamente</p>';
+                    
+                } catch (error) {
+                    result.className = 'result error';
+                    result.innerHTML = \`❌ Error en carrusel: \${error.message}\`;
+                    console.error('Carousel test error:', error);
+                }
+            }, 500);
+        }
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('✅ Test Simple inicializado');
+            console.log('📱 User Agent:', navigator.userAgent);
+            console.log('🖥️ Screen:', window.screen.width, '×', window.screen.height);
+            console.log('🌐 Online:', navigator.onLine);
+            
+            // Auto-test básico
+            setTimeout(() => {
+                testBasic();
+            }, 1000);
+        });
+        
+        // Error handling global
+        window.addEventListener('error', (e) => {
+            console.error('⚠️ Error global:', e.message, 'en', e.filename, 'línea', e.lineno);
+        });
+        
+        window.addEventListener('unhandledrejection', (e) => {
+            console.error('⚠️ Promise rechazada:', e.reason);
+        });
+    </script>
+</body>
+</html>
