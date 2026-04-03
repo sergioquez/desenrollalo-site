@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>🎞️ Desenrollalo - Calculadora de Revelado Fotográfico</title>
+    <meta name="description" content="Calculadora y guía paso a paso para revelado fotográfico C-41 y D-76. Perfecto para principiantes y expertos.">
+    <link rel="stylesheet" href="redesign-v2.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎞️</text></svg>">
+    <style>
+        /* Estilos críticos para render inicial */
+        .app-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        .app-loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+        
+        .loading-text {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de carga -->
+    <div class="app-loading" id="appLoading">
+        <div class="loading-logo">🎞️</div>
+        <div class="loading-text">Cargando Desenrollalo...</div>
+    </div>
+
+    <!-- Aplicación principal -->
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🎞️</span>
+                    <span>Desenrollalo</span>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                    <span id="themeIcon">🌙</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <!-- Sección 1: Calculadora -->
+            <section class="calculator-section" id="calculatorSection">
+                <div class="section-header">
+                    <h1>Calculadora de Revelado</h1>
+                    <p class="section-subtitle">Calcula tiempos exactos para procesos C-41 (color) y D-76 (blanco y negro)</p>
+                </div>
+
+                <form class="calculator-form" id="calculatorForm">
+                    <!-- Tipo de película -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">📷</span>
+                            Tipo de Película
+                        </label>
+                        <div class="select-group">
+                            <div class="select-wrapper">
+                                <select id="filmType" required aria-label="Seleccionar tipo de película">
+                                    <option value="" disabled selected>Seleccionar...</option>
+                                    <option value="35mm">35mm (Estándar)</option>
+                                    <option value="120mm">120mm (Medio formato)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Proceso de revelado -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">🧪</span>
+                            Proceso de Revelado
+                        </label>
+                        <div class="select-group">
+                            <div class="select-wrapper">
+                                <select id="developer" required aria-label="Seleccionar proceso de revelado">
+                                    <option value="" disabled selected>Seleccionar...</option>
+                                    <option value="c41">C-41 (Color)</option>
+                                    <option value="d76">D-76 (Blanco y Negro)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="process-info" id="processInfo" style="display: none;">
+                            <div class="info-card" id="c41Info">
+                                <div class="info-label">Temperatura C-41</div>
+                                <div class="info-value">39°C ± 0.3°C</div>
+                            </div>
+                            <div class="info-card" id="d76Info">
+                                <div class="info-label">Temperatura D-76</div>
+                                <div class="info-value">20°C ideal (18-24°C)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Número de rollos -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">🎞️</span>
+                            Número de Rollos
+                        </label>
+                        <div class="rolls-input">
+                            <div class="rolls-control">
+                                <button type="button" class="rolls-button" id="decreaseRolls" aria-label="Disminuir rollos">-</button>
+                                <div class="rolls-display" id="rollsDisplay">1</div>
+                                <button type="button" class="rolls-button" id="increaseRolls" aria-label="Aumentar rollos">+</button>
+                            </div>
+                            <div class="rolls-label">
+                                <span id="rollsText">1 rollo</span>
+                                <span id="additionalTime" style="display: none;"> (+30s por rollo extra)</span>
+                            </div>
+                        </div>
+                        <input type="hidden" id="rolls" name="rolls" value="1" min="1" max="10">
+                    </div>
+
+                    <!-- Sistema de químicos -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">⚗️</span>
+                            Estado de Químicos
+                        </label>
+                        <div class="chemicals-system" id="chemicalsSystem" style="display: none;">
+                            <h4>
+                                <span>🧪</span>
+                                Capacidad Restante
+                            </h4>
+                            <div class="chemicals-grid" id="chemicalsGrid">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                            <div class="chemical-input" style="margin-top: var(--space-md);">
+                                <label for="chemicalsUsed" style="font-size: var(--text-sm); color: var(--text-secondary);">
+                                    Rollos ya procesados con estos químicos:
+                                </label>
+                                <div style="display: flex; gap: var(--space-sm); margin-top: var(--space-xs);">
+                                    <input type="number" id="chemicalsUsed" min="0" max="50" value="0" 
+                                           style="flex: 1; padding: var(--space-sm); border: 1px solid var(--border); border-radius: var(--radius-sm);">
+                                    <button type="button" id="updateChemicals" 
+                                            style="padding: var(--space-sm) var(--space-md); background: var(--primary); color: white; border: none; border-radius: var(--radius-sm);">
+                                        Actualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón de cálculo -->
+                    <button type="submit" class="calculate-button" id="calculateButton">
+                        <span>🧮</span>
+                        Calcular Tiempo de Revelado
+                    </button>
+                </form>
+            </section>
+
+            <!-- Sección 2: Resultados -->
+            <section class="results-section" id="resultsSection">
+                <div class="section-header">
+                    <h2>Resultados del Cálculo</h2>
+                    <p class="section-subtitle">Tiempos exactos y guía completa para tu revelado</p>
+                </div>
+
+                <!-- Tarjeta de tiempo principal -->
+                <div class="time-card" id="timeCard">
+                    <div class="time-label">Tiempo de Desarrollo</div>
+                    <div class="time-value" id="developmentTime">--:--</div>
+                    <div class="time-unit" id="timeUnit">minutos</div>
+                </div>
+
+                <!-- Información del proceso -->
+                <div class="process-info" id="resultsInfo">
+                    <div class="info-card">
+                        <div class="info-label">Proceso</div>
+                        <div class="info-value" id="processName">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Película</div>
+                        <div class="info-value" id="filmTypeResult">-</div>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-label">Rollos</div>
+                        <div class="info-value" id="rollsResult">-</div>
+                    </div>
+                    <div class="info-card warning" id="temperatureWarning">
+                        <div class="info-label">⚠️ Temperatura</div>
+                        <div class="info-value" id="temperatureResult">-</div>
+                    </div>
+                </div>
+
+                <!-- Botón para iniciar guía -->
+                <button class="calculate-button" id="startGuideButton" style="margin-top: var(--space-lg);">
+                    <span>🚀</span>
+                    Iniciar Guía Paso a Paso
+                </button>
+            </section>
+
+            <!-- Sección 3: Carrusel Paso a Paso -->
+            <section class="carousel-section" id="carouselSection">
+                <div class="carousel-header">
+                    <h2>Guía Paso a Paso</h2>
+                    <p class="carousel-subtitle">Sigue cada paso cuidadosamente para resultados perfectos</p>
+                </div>
+
+                <!-- Progress bar -->
+                <div class="carousel-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="currentStep">Paso 0</span>
+                        <span id="totalSteps">de 0</span>
+                    </div>
+                </div>
+
+                <!-- Contenedor de pasos -->
+                <div class="carousel-step" id="carouselStep">
+                    <!-- Se llenará dinámicamente -->
+                    <div class="step-header">
+                        <h3 class="step-title">
+                            <span class="step-icon">🎯</span>
+                            <span id="stepTitle">Bienvenido a la Guía de Revelado</span>
+                        </h3>
+                        <p class="step-description" id="stepDescription">
+                            Vamos a guiarte paso a paso en el proceso de revelado. Sigue cada instrucción cuidadosamente.
+                        </p>
+                    </div>
+
+                    <div class="step-content" id="stepContent">
+                        <!-- Contenido dinámico del paso -->
+                    </div>
+
+                    <!-- Timer (solo para pasos con tiempo) -->
+                    <div class="step-timer" id="stepTimer" style="display: none;">
+                        <div class="timer-display" id="timerDisplay">--:--</div>
+                        <div class="timer-label" id="timerLabel">Tiempo restante</div>
+                        <div class="timer-progress">
+                            <div class="timer-progress-fill" id="timerProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Alertas de agitación -->
+                    <div class="agitation-alerts" id="agitationAlerts">
+                        <!-- Alertas dinámicas -->
+                    </div>
+                </div>
+
+                <!-- Controles del carrusel -->
+                <div class="carousel-controls">
+                    <button class="carousel-button prev" id="prevButton" disabled>
+                        <span>←</span>
+                        Atrás
+                    </button>
+                    <button class="carousel-button start-timer" id="startTimerButton" style="display: none;">
+                        <span>⏱️</span>
+                        Iniciar Timer
+                    </button>
+                    <button class="carousel-button next" id="nextButton">
+                        <span>Siguiente</span>
+                        <span>→</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>🎞️ <strong>Desenrollalo</strong> - Calculadora de revelado fotográfico</p>
+                <p style="margin-top: var(--space-xs); font-size: var(--text-xs);">
+                    Diseñado para fotógrafos • Precisión garantizada • Código abierto
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="redesign-v2.js" defer></script>
+    <script>
+        // Script crítico para carga inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ocultar pantalla de carga después de 1.5 segundos
+            setTimeout(() => {
+                const loading = document.getElementById('appLoading');
+                const app = document.getElementById('appContainer');
+                
+                loading.classList.add('hidden');
+                app.style.display = 'block';
+                
+                // Remover completamente después de la animación
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, 500);
+            }, 1500);
+            
+            // Detectar tema del sistema
+            const detectSystemTheme = () => {
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            };
+            
+            // Configurar theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            // Cargar tema guardado o usar sistema
+            const savedTheme = localStorage.getItem('theme') || detectSystemTheme();
+            if (savedTheme === 'dark') {
+                document.documentElement.style.setProperty('color-scheme', 'dark');
+                themeIcon.textContent = '☀️';
+            } else {
+                document.documentElement.style.setProperty('color-scheme', 'light');
+                themeIcon.textContent = '🌙';
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                const currentScheme = document.documentElement.style.getPropertyValue('color-scheme');
+                if (currentScheme === 'dark') {
+                    document.documentElement.style.setProperty('color-scheme', 'light');
+                    themeIcon.textContent = '🌙';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.style.setProperty('color-scheme', 'dark');
+                    themeIcon.textContent = '☀️';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+            
+            // Escuchar cambios en el tema del sistema
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    if (e.matches) {
+                        document.documentElement.style.setProperty('color-scheme', 'dark');
+                        themeIcon.textContent = '☀️';
+                    } else {
+                        document.documentElement.style.setProperty('color-scheme', 'light');
+                        themeIcon.textContent = '🌙';
+                    }
+                }
+            });
+        });
+        
+        // Prevenir zoom en inputs en iOS
+        document.addEventListener('touchstart', function(event) {
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'SELECT' || event.target.tagName === 'TEXTAREA') {
+                event.preventDefault();
+            }
+        }, { passive: false });
+    </script>
+</body>
+</html>
