@@ -1228,18 +1228,5 @@ class FilmDevelopmentApp {
 document.addEventListener('DOMContentLoaded', () => {
     window.filmDevelopmentApp = new FilmDevelopmentApp();
     
-    // Forzar redibujado en móviles para prevenir problemas de render
-    if ('ontouchstart' in window) {
-        document.body.style.webkitTransform = 'translateZ(0)';
-        document.body.style.transform = 'translateZ(0)';
-    }
-    
-    // Prevenir zoom en inputs en iOS
-    document.addEventListener('touchstart', (e) => {
-        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
-            e.preventDefault();
-        }
-    }, { passive: false });
-    
     console.log('🎞️ Desenrollalo v2.0 cargado exitosamente');
 });
