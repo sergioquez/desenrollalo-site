@@ -213,6 +213,11 @@ body {
 .carousel-section {
   margin-bottom: var(--space-2xl);
   animation: fadeIn var(--transition-slow) ease;
+  display: none; /* Ocultas por defecto */
+}
+
+.calculator-section {
+  display: block; /* Solo la calculadora visible inicialmente */
 }
 
 .section-header {

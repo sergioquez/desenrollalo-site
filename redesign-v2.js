@@ -42,13 +42,21 @@ class FilmDevelopmentApp {
     }
 
     init() {
+        console.log('🎞️ Inicializando Desenrollalo v2.0...');
         this.cacheElements();
+        console.log('✅ Elementos cacheados');
         this.bindEvents();
+        console.log('✅ Eventos vinculados');
         this.updateChemicalSystem();
         this.updateRollsDisplay();
+        this.initializeSections();
+        console.log('✅ Secciones inicializadas');
+        console.log('✅ Aplicación lista para usar');
     }
 
     cacheElements() {
+        console.log('🔍 Cacheando elementos del DOM...');
+        
         // Formulario
         this.filmTypeSelect = document.getElementById('filmType');
         this.developerSelect = document.getElementById('developer');
@@ -60,6 +68,11 @@ class FilmDevelopmentApp {
         this.increaseRollsBtn = document.getElementById('increaseRolls');
         this.calculateButton = document.getElementById('calculateButton');
         this.calculatorForm = document.getElementById('calculatorForm');
+        
+        // Verificar elementos críticos
+        if (!this.calculateButton) console.error('❌ calculateButton no encontrado');
+        if (!this.filmTypeSelect) console.error('❌ filmTypeSelect no encontrado');
+        if (!this.developerSelect) console.error('❌ developerSelect no encontrado');
 
         // Sistema de químicos
         this.chemicalsSystem = document.getElementById('chemicalsSystem');
@@ -76,6 +89,8 @@ class FilmDevelopmentApp {
         this.rollsResult = document.getElementById('rollsResult');
         this.temperatureResult = document.getElementById('temperatureResult');
         this.startGuideButton = document.getElementById('startGuideButton');
+        
+        if (!this.startGuideButton) console.error('❌ startGuideButton no encontrado');
 
         // Carrusel
         this.carouselSection = document.getElementById('carouselSection');
@@ -93,6 +108,11 @@ class FilmDevelopmentApp {
         this.prevButton = document.getElementById('prevButton');
         this.nextButton = document.getElementById('nextButton');
         this.startTimerButton = document.getElementById('startTimerButton');
+        
+        if (!this.prevButton) console.error('❌ prevButton no encontrado');
+        if (!this.nextButton) console.error('❌ nextButton no encontrado');
+        
+        console.log('✅ Todos los elementos cacheados');
     }
 
     bindEvents() {
@@ -279,6 +299,13 @@ class FilmDevelopmentApp {
         this.chemicalsUsedInput.value = this.state.chemicalsUsed;
     }
 
+    initializeSections() {
+        // Mostrar solo la calculadora inicialmente
+        this.calculatorSection.classList.add('active');
+        this.resultsSection.classList.remove('active');
+        this.carouselSection.classList.remove('active');
+    }
+
     calculateChemicalCapacity() {
         if (this.state.developer === 'c41') {
             return {
@@ -335,8 +362,10 @@ class FilmDevelopmentApp {
             this.temperatureResult.textContent = '20°C ideal (18-24°C)';
         }
         
-        // Mostrar sección de resultados
+        // Mostrar sección de resultados y ocultar calculadora
+        this.calculatorSection.classList.remove('active');
         this.resultsSection.classList.add('active');
+        this.carouselSection.classList.remove('active');
         
         // Scroll suave a resultados
         setTimeout(() => {
@@ -374,7 +403,8 @@ class FilmDevelopmentApp {
         // Actualizar UI del carrusel
         this.totalStepsSpan.textContent = `de ${this.state.totalSteps}`;
         
-        // Mostrar carrusel
+        // Mostrar carrusel y ocultar resultados
+        this.resultsSection.classList.remove('active');
         this.carouselSection.classList.add('active');
         
         // Mostrar primer paso
@@ -623,7 +653,7 @@ class FilmDevelopmentApp {
         // Developer
         steps.push({
             title: '🧪 Developer D-76',
-            description: \`\${Math.floor(devTime/60)} minutos desarrollo\`,
+            description: `${Math.floor(devTime/60)} minutos desarrollo`,
             type: 'process',
             duration: devTime,
             agitation: this.generateD76Agitation(devTime),
@@ -695,7 +725,7 @@ class FilmDevelopmentApp {
 
     getC41StepContent(step, duration) {
         const contents = {
-            'prewash': \`
+            'prewash': `
                 <div class="actions-list">
                     <h4><span>💧</span> Instrucciones</h4>
                     <ul>
@@ -706,8 +736,8 @@ class FilmDevelopmentApp {
                         <li><em>Nota: Este paso es opcional pero recomendado</em></li>
                     </ul>
                 </div>
-            \`,
-            'developer': \`
+            `,
+            'developer': `
                 <div class="actions-list">
                     <h4><span>🚨</span> Instrucciones CRÍTICAS</h4>
                     <ul>
@@ -730,8 +760,8 @@ class FilmDevelopmentApp {
                         </div>
                     </div>
                 </div>
-            \`,
-            'blix': \`
+            `,
+            'blix': `
                 <div class="actions-list">
                     <h4><span>⚠️</span> Instrucciones Importantes</h4>
                     <ul>
@@ -741,8 +771,8 @@ class FilmDevelopmentApp {
                         <li>Preparar agua de lavado mientras corre timer</li>
                     </ul>
                 </div>
-            \`,
-            'wash': \`
+            `,
+            'wash': `
                 <div class="actions-list">
                     <h4><span>💦</span> Método de Lavado</h4>
                     <ul>
@@ -753,8 +783,8 @@ class FilmDevelopmentApp {
                         <li>Último llenado: dejar 30 segundos</li>
                     </ul>
                 </div>
-            \`,
-            'stabilizer': \`
+            `,
+            'stabilizer': `
                 <div class="actions-list">
                     <h4><span>🛡️</span> Instrucciones Finales</h4>
                     <ul>
@@ -765,7 +795,7 @@ class FilmDevelopmentApp {
                         <li>Preparar área de secado</li>
                     </ul>
                 </div>
-            \`
+            `
         };
         
         return contents[step] || '';
@@ -773,7 +803,7 @@ class FilmDevelopmentApp {
 
     getD76StepContent(step, duration) {
         const contents = {
-            'developer': \`
+            'developer': `
                 <div class="actions-list">
                     <h4><span>📊</span> Instrucciones Developer</h4>
                     <ul>
@@ -803,8 +833,8 @@ class FilmDevelopmentApp {
                         </div>
                     </div>
                 </div>
-            \`,
-            'stop': \`
+            `,
+            'stop': `
                 <div class="actions-list">
                     <h4><span>🛑</span> Instrucciones Stop Bath</h4>
                     <ul>
@@ -814,8 +844,8 @@ class FilmDevelopmentApp {
                         <li>Preparar fixer mientras corre timer</li>
                     </ul>
                 </div>
-            \`,
-            'fixer': \`
+            `,
+            'fixer': `
                 <div class="actions-list">
                     <h4><span>✅</span> Instrucciones Fixer</h4>
                     <ul>
@@ -826,8 +856,8 @@ class FilmDevelopmentApp {
                         <li>Si no está clear, extender 1-2 minutos más</li>
                     </ul>
                 </div>
-            \`,
-            'wash': \`
+            `,
+            'wash': `
                 <div class="actions-list">
                     <h4><span>💦</span> Método Ilford (Recomendado)</h4>
                     <ul>
@@ -839,8 +869,8 @@ class FilmDevelopmentApp {
                         <li><em>Total: 23 minutos, agua a 20°C</em></li>
                     </ul>
                 </div>
-            \`,
-            'photoflo': \`
+            `,
+            'photoflo': `
                 <div class="actions-list">
                     <h4><span>✨</span> Instrucciones Photo-Flo</h4>
                     <ul>
@@ -851,7 +881,7 @@ class FilmDevelopmentApp {
                         <li><em>Opcional: reduce manchas de agua</em></li>
                     </ul>
                 </div>
-            \`
+            `
         };
         
         return contents[step] || '';
@@ -860,7 +890,7 @@ class FilmDevelopmentApp {
     getDryingContent(process) {
         const isC41 = process === 'c41';
         
-        return \`
+        return `
             <div class="actions-list">
                 <h4><span>🌬️</span> Instrucciones de Secado</h4>
                 <ul>
@@ -883,7 +913,7 @@ class FilmDevelopmentApp {
                     <li>Registrar químicos utilizados</li>
                 </ul>
             </div>
-        \`;
+        `;
     }
 
     getCompletionContent() {
@@ -892,7 +922,7 @@ class FilmDevelopmentApp {
             ? Math.min(capacity.developer, capacity.blix, capacity.stabilizer)
             : Math.min(capacity.developerStock, capacity.fixer, capacity.stopBath);
         
-        return \`
+        return `
             <div class="actions-list">
                 <h4><span>🎉</span> ¡Felicidades!</h4>
                 <ul>
@@ -925,14 +955,14 @@ class FilmDevelopmentApp {
                     <li>Compartir resultados con comunidad</li>
                 </ul>
             </div>
-        \`;
+        `;
     }
 
     getChemicalStatusHTML() {
         const capacity = this.calculateChemicalCapacity();
         
         if (this.state.developer === 'c41') {
-            return \`
+            return `
                 <div class="chemical-item">
                     <div class="chemical-name">Developer</div>
                     <div class="chemical-bar">
@@ -954,9 +984,9 @@ class FilmDevelopmentApp {
                     </div>
                     <div class="chemical-remaining">\${capacity.stabilizer}/50</div>
                 </div>
-            \`;
+            `;
         } else {
-            return \`
+            return `
                 <div class="chemical-item">
                     <div class="chemical-name">Developer Stock</div>
                     <div class="chemical-bar">
@@ -978,7 +1008,7 @@ class FilmDevelopmentApp {
                     </div>
                     <div class="chemical-remaining">\${capacity.stopBath}/50</div>
                 </div>
-            \`;
+            `;
         }
     }
 
@@ -1057,8 +1087,8 @@ class FilmDevelopmentApp {
         
         // Actualizar progress bar
         const progress = ((stepIndex + 1) / this.state.steps.length) * 100;
-        this.progressFill.style.width = \`\${progress}%\`;
-        this.currentStepSpan.textContent = \`Paso \${stepIndex + 1}\`;
+        this.progressFill.style.width = `${progress}%`;
+        this.currentStepSpan.textContent = `Paso ${stepIndex + 1}`;
         
         // Configurar timer si el paso tiene duración
         if (step.duration > 0) {
@@ -1094,11 +1124,11 @@ class FilmDevelopmentApp {
         agitation.forEach(ag => {
             const alert = document.createElement('div');
             alert.className = 'agitation-alert';
-            alert.innerHTML = \`
+            alert.innerHTML = `
                 <span class="alert-icon">🔄</span>
                 <span class="alert-text">\${ag.action}</span>
                 <span class="alert-time">\${this.formatTime(ag.time)}</span>
-            \`;
+            `;
             this.agitationAlerts.appendChild(alert);
         });
     }
@@ -1149,16 +1179,16 @@ class FilmDevelopmentApp {
         
         const step = this.state.steps[this.state.currentStep];
         const progress = ((step.duration - this.state.timeLeft) / step.duration) * 100;
-        this.timerProgress.style.width = \`\${progress}%\`;
+        this.timerProgress.style.width = `\${progress}%`;
     }
 
     showAgitationAlert(action) {
         const alert = document.createElement('div');
         alert.className = 'agitation-alert';
-        alert.innerHTML = \`
+        alert.innerHTML = `
             <span class="alert-icon">🔄</span>
             <span class="alert-text">\${action}</span>
-        \`;
+        `;
         
         this.agitationAlerts.appendChild(alert);
         
@@ -1195,10 +1225,10 @@ class FilmDevelopmentApp {
     showSuccess(message) {
         const successDiv = document.createElement('div');
         successDiv.className = 'success-message';
-        successDiv.innerHTML = \`
+        successDiv.innerHTML = `
             <span class="success-icon">✅</span>
             <span>\${message}</span>
-        \`;
+        `;
         
         this.stepContent.appendChild(successDiv);
         
@@ -1234,7 +1264,7 @@ class FilmDevelopmentApp {
     formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
-        return \`\${mins.toString().padStart(2, '0')}:\${secs.toString().padStart(2, '0')}\`;
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     }
 }
 
