@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Deploy Status</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        .status { padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .loading { background: #fff3cd; border: 1px solid #ffeaa7; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>Verificación de Deploy GitHub Pages</h1>
+    
+    <div class="status loading" id="status1">
+        <h3>1. Verificando archivo CSS...</h3>
+        <div id="cssStatus">⏳ Cargando...</div>
+    </div>
+    
+    <div class="status loading" id="status2">
+        <h3>2. Verificando archivo JS...</h3>
+        <div id="jsStatus">⏳ Cargando...</div>
+    </div>
+    
+    <div class="status loading" id="status3">
+        <h3>3. Verificando cambios específicos...</h3>
+        <div id="changesStatus">⏳ Cargando...</div>
+    </div>
+    
+    <div class="status loading" id="status4">
+        <h3>4. Enlace a la aplicación:</h3>
+        <p><a href="https://sergioquez.github.io/desenrollalo-site/redesign-v2.html" target="_blank">https://sergioquez.github.io/desenrollalo-site/redesign-v2.html</a></p>
+        <p><strong>Nota:</strong> GitHub Pages puede tomar 1-3 minutos para actualizar después del push.</p>
+    </div>
+
+    <script>
+        async function checkCSS() {
+            try {
+                const response = await fetch('https://sergioquez.github.io/desenrollalo-site/redesign-v2.css');
+                if (response.ok) {
+                    const text = await response.text();
+                    const hasDisplayNone = text.includes('display: none') && text.includes('.calculator-section, .results-section, .carousel-section');
+                    const hasDisplayBlock = text.includes('display: block') && text.includes('.calculator-section');
+                    
+                    document.getElementById('cssStatus').innerHTML = `
+                        ✅ CSS cargado (${text.length} bytes)<br>
+                        ${hasDisplayNone ? '✅ display: none encontrado' : '❌ display: none NO encontrado'}<br>
+                        ${hasDisplayBlock ? '✅ display: block para calculadora' : '❌ display: block NO encontrado'}
+                    `;
+                    document.getElementById('status1').className = 'status ' + (hasDisplayNone && hasDisplayBlock ? 'success' : 'error');
+                    
+                    return { success: true, hasDisplayNone, hasDisplayBlock };
+                } else {
+                    throw new Error(`Status: ${response.status}`);
+                }
+            } catch (err) {
+                document.getElementById('cssStatus').innerHTML = `❌ Error: ${err.message}`;
+                document.getElementById('status1').className = 'status error';
+                return { success: false };
+            }
+        }
+        
+        async function checkJS() {
+            try {
+                const response = await fetch('https://sergioquez.github.io/desenrollalo-site/redesign-v2.js');
+                if (response.ok) {
+                    const text = await response.text();
+                    const hasInitializeSections = text.includes('initializeSections()');
+                    const hasShowResultsUpdate = text.includes('calculatorSection.classList.remove') && text.includes('showResults');
+                    const hasFixedTemplates = !text.includes('\\\\`') && !text.includes('\\`\\${');
+                    
+                    document.getElementById('jsStatus').innerHTML = `
+                        ✅ JS cargado (${text.length} bytes)<br>
+                        ${hasInitializeSections ? '✅ initializeSections() encontrado' : '❌ initializeSections() NO encontrado'}<br>
+                        ${hasShowResultsUpdate ? '✅ showResults() actualizado' : '❌ showResults() NO actualizado'}<br>
+                        ${hasFixedTemplates ? '✅ Template literales corregidos' : '❌ Template literales con problemas'}
+                    `;
+                    document.getElementById('status2').className = 'status ' + (hasInitializeSections && hasShowResultsUpdate && hasFixedTemplates ? 'success' : 'error');
+                    
+                    return { success: true, hasInitializeSections, hasShowResultsUpdate, hasFixedTemplates };
+                } else {
+                    throw new Error(`Status: ${response.status}`);
+                }
+            } catch (err) {
+                document.getElementById('jsStatus').innerHTML = `❌ Error: ${err.message}`;
+                document.getElementById('status2').className = 'status error';
+                return { success: false };
+            }
+        }
+        
+        async function checkChanges() {
+            const cssResult = await checkCSS();
+            const jsResult = await checkJS();
+            
+            let changesHtml = '';
+            let allGood = true;
+            
+            if (cssResult.success && jsResult.success) {
+                changesHtml += '<strong>Cambios verificados:</strong><br>';
+                
+                if (cssResult.hasDisplayNone && cssResult.hasDisplayBlock) {
+                    changesHtml += '✅ CSS: Secciones ocultas por defecto<br>';
+                } else {
+                    changesHtml += '❌ CSS: Problemas con visibilidad<br>';
+                    allGood = false;
+                }
+                
+                if (jsResult.hasInitializeSections && jsResult.hasShowResultsUpdate) {
+                    changesHtml += '✅ JS: Lógica de transición implementada<br>';
+                } else {
+                    changesHtml += '❌ JS: Problemas con transición<br>';
+                    allGood = false;
+                }
+                
+                if (jsResult.hasFixedTemplates) {
+                    changesHtml += '✅ JS: Sintaxis corregida<br>';
+                } else {
+                    changesHtml += '❌ JS: Problemas de sintaxis<br>';
+                    allGood = false;
+                }
+                
+                if (allGood) {
+                    changesHtml += '<br><strong>🎉 ¡Todos los cambios están desplegados!</strong><br>';
+                    changesHtml += 'La aplicación debería funcionar correctamente ahora.';
+                } else {
+                    changesHtml += '<br><strong>⚠️ Algunos cambios no están desplegados</strong><br>';
+                    changesHtml += 'Espera unos minutos y refresca esta página.';
+                }
+            } else {
+                changesHtml = '❌ No se pudieron verificar todos los cambios';
+                allGood = false;
+            }
+            
+            document.getElementById('changesStatus').innerHTML = changesHtml;
+            document.getElementById('status3').className = 'status ' + (allGood ? 'success' : 'error');
+            
+            // Actualizar tiempo
+            const now = new Date();
+            document.getElementById('status4').innerHTML += `
+                <p><strong>Última verificación:</strong> ${now.toLocaleTimeString()}</p>
+                <button onclick="location.reload()">🔄 Refrescar verificación</button>
+            `;
+        }
+        
+        // Ejecutar verificación
+        checkChanges();
+    </script>
+</body>
+</html>
