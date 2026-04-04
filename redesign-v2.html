@@ -298,6 +298,12 @@
 
     <!-- JavaScript -->
     <script>
+        // Error handler global
+        window.addEventListener('error', function(event) {
+            console.error('❌ Error global:', event.message, 'en', event.filename, 'línea', event.lineno);
+            console.error('Error completo:', event.error);
+        });
+        
         // Script crítico para carga inicial
         document.addEventListener('DOMContentLoaded', function() {
             // Ocultar pantalla de carga después de 1.5 segundos
@@ -314,11 +320,34 @@
                     const script = document.createElement('script');
                     script.src = 'redesign-v2.js';
                     script.onload = function() {
-                        window.filmDevelopmentApp = new FilmDevelopmentApp();
-                        console.log('🎞️ Desenrollalo v2.0 cargado exitosamente');
+                        console.log('✅ redesign-v2.js cargado exitosamente');
+                        try {
+                            window.filmDevelopmentApp = new FilmDevelopmentApp();
+                            console.log('🎞️ Desenrollalo v2.0 inicializado exitosamente');
+                        } catch (error) {
+                            console.error('❌ Error instanciando FilmDevelopmentApp:', error);
+                            console.error('Stack:', error.stack);
+                            // Mostrar error al usuario
+                            const errorDiv = document.createElement('div');
+                            errorDiv.style.cssText = 'position: fixed; top: 20px; left: 20px; right: 20px; background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 9999;';
+                            errorDiv.innerHTML = `
+                                <h3 style="margin: 0 0 10px 0;">❌ Error en la aplicación</h3>
+                                <p style="margin: 0; font-size: 14px;">${error.message}</p>
+                                <button onclick="this.parentElement.remove()" style="margin-top: 10px; padding: 5px 10px; background: white; color: #ef4444; border: none; border-radius: 4px;">Cerrar</button>
+                            `;
+                            document.body.appendChild(errorDiv);
+                        }
                     };
                     script.onerror = function(err) {
-                        console.error('❌ Error cargando la aplicación:', err);
+                        console.error('❌ Error cargando redesign-v2.js:', err);
+                        const errorDiv = document.createElement('div');
+                        errorDiv.style.cssText = 'position: fixed; top: 20px; left: 20px; right: 20px; background: #ef4444; color: white; padding: 20px; border-radius: 8px; z-index: 9999;';
+                        errorDiv.innerHTML = `
+                            <h3 style="margin: 0 0 10px 0;">❌ Error cargando la aplicación</h3>
+                            <p style="margin: 0; font-size: 14px;">No se pudo cargar el archivo JavaScript. Por favor, recarga la página.</p>
+                            <button onclick="location.reload()" style="margin-top: 10px; padding: 5px 10px; background: white; color: #ef4444; border: none; border-radius: 4px;">Recargar página</button>
+                        `;
+                        document.body.appendChild(errorDiv);
                     };
                     document.head.appendChild(script);
                 }, 100);
