@@ -36,17 +36,30 @@ class DesenrollaloAnalytics {
     });
 
     // Track timer interactions
-    ['start-btn', 'stop-btn', 'reset-btn'].forEach(btnId => {
-      const btn = document.getElementById(btnId);
-      if (btn) {
-        btn.addEventListener('click', () => {
-          this.track('timer_action', { action: btnId.replace('-btn', '') });
-        });
-      }
-    });
+    const startBtn = document.querySelector('.timer-controls .start');
+    const stopBtn = document.querySelector('.timer-controls .stop');
+    const resetBtn = document.querySelector('.timer-controls .reset');
+    
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        this.track('timer_action', { action: 'start' });
+      });
+    }
+    
+    if (stopBtn) {
+      stopBtn.addEventListener('click', () => {
+        this.track('timer_action', { action: 'stop' });
+      });
+    }
+    
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        this.track('timer_action', { action: 'reset' });
+      });
+    }
 
     // Track calculator usage
-    const calculateBtn = document.getElementById('calculate-btn');
+    const calculateBtn = document.querySelector('.calculator button.calculate');
     if (calculateBtn) {
       calculateBtn.addEventListener('click', () => {
         const filmType = document.getElementById('film-type').value;

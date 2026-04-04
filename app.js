@@ -1,3 +1,5 @@
+console.log('app.js loading...');
+
 const DEVELOPMENT_TIMES = {
   '35mm': {
     'c41': 15,
@@ -19,10 +21,14 @@ let timerDisplay, startBtn, stopBtn, resetBtn;
 let enableAlertsBtn, disableAlertsBtn, alertSound;
 
 function calculateAndStartTimer() {
+  console.log('calculateAndStartTimer called');
+  
   // Get current values from DOM elements
   const filmType = document.getElementById('film-type').value;
   const developer = document.getElementById('developer').value;
   const rolls = parseInt(document.getElementById('rolls').value, 10);
+  
+  console.log('Values:', { filmType, developer, rolls });
   
   if (isNaN(rolls) || rolls < 1) {
     alert('Por favor ingresa un número válido de rollos (mínimo 1)');
@@ -36,30 +42,47 @@ function calculateAndStartTimer() {
   const resultDiv = document.querySelector('.calculator .result');
   if (resultDiv) {
     resultDiv.textContent = `Tiempo total de revelado: ${minutes}min ${seconds}s`;
+    console.log('Result displayed:', resultDiv.textContent);
   }
   
   startTimer(totalDevelopmentTime);
 }
 
 function startTimer(totalDevelopmentTime) {
+  console.log('Starting timer for', totalDevelopmentTime, 'seconds');
+  
+  // Stop any existing timer
+  if (timerInterval) {
+    clearInterval(timerInterval);
+  }
+  
+  elapsedSeconds = 0;
+  updateTimerDisplay();
+  updateProgressBar(0, totalDevelopmentTime);
+  
   timerInterval = setInterval(() => {
     elapsedSeconds++;
     updateTimerDisplay();
     updateProgressBar(elapsedSeconds, totalDevelopmentTime);
+    
     if (elapsedSeconds >= totalDevelopmentTime) {
-      stopTimer();
+      clearInterval(timerInterval);
       playAlertSound();
       showDevelopmentCompleteNotification();
-      addCalendarEvent(totalDevelopmentTime);
     }
   }, 1000);
 }
 
 function stopTimer() {
-  clearInterval(timerInterval);
+  console.log('Stopping timer');
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
 }
 
 function resetTimer() {
+  console.log('Resetting timer');
   stopTimer();
   elapsedSeconds = 0;
   updateTimerDisplay();
@@ -67,19 +90,22 @@ function resetTimer() {
 }
 
 function updateTimerDisplay() {
+  const minutes = Math.floor(elapsedSeconds / 60).toString().padStart(2, '0');
+  const seconds = (elapsedSeconds % 60).toString().padStart(2, '0');
+  
   const timerDisplay = document.querySelector('.timer-display');
   if (timerDisplay) {
-    const minutes = Math.floor(elapsedSeconds / 60).toString().padStart(2, '0');
-    const seconds = (elapsedSeconds % 60).toString().padStart(2, '0');
     timerDisplay.textContent = `${minutes}:${seconds}`;
   }
 }
 
 function updateProgressBar(currentTime, totalTime) {
   const progressBar = document.querySelector('.timer .progress-bar');
-  if (progressBar) {
+  if (progressBar && totalTime > 0) {
     const progress = (currentTime / totalTime) * 100;
     progressBar.style.width = `${progress}%`;
+  } else if (progressBar) {
+    progressBar.style.width = '0%';
   }
 }
 
@@ -107,43 +133,38 @@ function showDevelopmentCompleteNotification() {
   alert('¡Revelado terminado! Es hora de pasar a la siguiente etapa.');
 }
 
-function addCalendarEvent(totalDevelopmentTime) {
-  const event = {
-    title: 'Revelar película',
-    start: new Date().toISOString(),
-    end: new Date(new Date().getTime() + totalDevelopmentTime * 1000).toISOString()
-  };
-
-  if (navigator.calendar) {
-    navigator.calendar.createEvent(event);
-    alert('Se ha agregado un evento al calendario.');
-  } else {
-    alert('No se pudo agregar el evento al calendario.');
-  }
-}
-
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-  // Re-select elements to ensure they exist
-  const filmTypeSelect = document.getElementById('film-type');
-  const developerSelect = document.getElementById('developer');
-  const rollsInput = document.getElementById('rolls');
-  const calculateBtn = document.querySelector('.calculator button.calculate');
-  const resultDiv = document.querySelector('.calculator .result');
-  const progressBar = document.querySelector('.timer .progress-bar');
+  console.log('DOMContentLoaded in app.js');
   
-  const timerDisplay = document.querySelector('.timer-display');
-  const startBtn = document.querySelector('.timer-controls .start');
-  const stopBtn = document.querySelector('.timer-controls .stop');
-  const resetBtn = document.querySelector('.timer-controls .reset');
+  // Get all elements
+  filmTypeSelect = document.getElementById('film-type');
+  developerSelect = document.getElementById('developer');
+  rollsInput = document.getElementById('rolls');
+  calculateBtn = document.querySelector('.calculator button.calculate');
+  resultDiv = document.querySelector('.calculator .result');
+  progressBar = document.querySelector('.timer .progress-bar');
   
-  const enableAlertsBtn = document.querySelector('.alerts .enable-alerts');
-  const disableAlertsBtn = document.querySelector('.alerts .disable-alerts');
-  const alertSound = document.getElementById('alert-sound');
+  timerDisplay = document.querySelector('.timer-display');
+  startBtn = document.querySelector('.timer-controls .start');
+  stopBtn = document.querySelector('.timer-controls .stop');
+  resetBtn = document.querySelector('.timer-controls .reset');
+  
+  enableAlertsBtn = document.querySelector('.alerts .enable-alerts');
+  disableAlertsBtn = document.querySelector('.alerts .disable-alerts');
+  alertSound = document.getElementById('alert-sound');
+  
+  console.log('Elements found:', {
+    calculateBtn: !!calculateBtn,
+    startBtn: !!startBtn,
+    stopBtn: !!stopBtn,
+    resetBtn: !!resetBtn
+  });
   
   // Add event listeners
   if (startBtn) {
     startBtn.addEventListener('click', () => {
+      console.log('Start button clicked');
       calculateAndStartTimer();
     });
   }
@@ -169,11 +190,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Also add event listener for calculate button
+  // CRITICAL FIX: Add event listener for calculate button
   if (calculateBtn) {
-    calculateBtn.addEventListener('click', () => {
+    console.log('Adding event listener to calculate button');
+    calculateBtn.addEventListener('click', (event) => {
+      console.log('Calculate button clicked via event listener', event);
       calculateAndStartTimer();
     });
+    
+    // Also add as global function for onclick attribute
+    calculateBtn.onclick = function(event) {
+      console.log('Calculate button onclick handler', event);
+      // calculateAndStartTimer will be called by the event listener above
+    };
+  } else {
+    console.error('Calculate button not found! Selector: .calculator button.calculate');
+    // Try alternative selector
+    const altBtn = document.querySelector('.calculate');
+    if (altBtn) {
+      console.log('Found button with class .calculate instead');
+      altBtn.addEventListener('click', calculateAndStartTimer);
+    }
   }
   
   // Theme toggle functionality
@@ -196,13 +233,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Save to localStorage
       localStorage.setItem('theme', newTheme);
-      
-      // Show brief confirmation
-      const originalTitle = themeToggle.getAttribute('title');
-      themeToggle.setAttribute('title', `Tema cambiado a ${newTheme === 'dark' ? 'oscuro' : 'claro'}`);
-      setTimeout(() => {
-        themeToggle.setAttribute('title', originalTitle);
-      }, 2000);
     }
     
     themeToggle.addEventListener('click', toggleTheme);
@@ -213,10 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
     themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
   }
   
-  console.log('Timer initialized successfully');
+  // Initialize timer display
+  updateTimerDisplay();
+  
+  console.log('app.js initialized successfully');
+  
+  // Make function available globally for onclick attribute
+  window.calculateAndStartTimer = calculateAndStartTimer;
+  window.showDevelopmentGuide = showDevelopmentGuide;
 });
 
-// Film development expert functions
+// Film development expert functions (keep existing)
 function getDevelopmentInstructions(filmType, developer) {
   const instructions = {
     'c41': {
@@ -278,6 +315,8 @@ function getDevelopmentInstructions(filmType, developer) {
 }
 
 function showDevelopmentGuide() {
+  console.log('showDevelopmentGuide called');
+  
   const filmType = document.getElementById('film-type');
   const developer = document.getElementById('developer');
   const rolls = document.getElementById('rolls');
@@ -298,13 +337,6 @@ function showDevelopmentGuide() {
     alert('Por favor ingresa un número válido de rollos (mínimo 1)');
     rolls.value = '1';
     return;
-  }
-  
-  if (rollsNum > 10) {
-    if (!confirm(`¿Estás seguro de revelar ${rollsNum} rollos a la vez? Esto requiere mucho químico.`)) {
-      rolls.value = '5';
-      return;
-    }
   }
   
   const instructions = getDevelopmentInstructions(filmTypeValue, developerValue);
@@ -367,49 +399,6 @@ function showDevelopmentGuide() {
   }
   
   guideContainer.innerHTML = guideHTML;
-  
-  // Add step-by-step planner section
-  const plannerHTML = `
-    <div class="planner-section">
-      <h4>🚀 Planificador Paso a Paso (Carrusel)</h4>
-      <p>Guía interactiva: avanza paso a paso con timer integrado y agitación específica:</p>
-      <div class="step-carousel-container"></div>
-    </div>
-    
-    <div class="checklist-section">
-      <h4>📋 Checklist Interactivo</h4>
-      <p>Sigue el proceso paso a paso con timers integrados:</p>
-      <div class="checklist-container"></div>
-    </div>
-  `;
-  
-  guideContainer.innerHTML += plannerHTML;
-  
-  // Load step-by-step planner script and initialize
-  const stepPlannerScript = document.createElement('script');
-  stepPlannerScript.src = 'step-by-step-planner.js';
-  stepPlannerScript.onload = () => {
-    if (typeof initStepByStepPlanner === 'function') {
-      initStepByStepPlanner(filmTypeValue, developerValue, rollsNum);
-    }
-  };
-  document.head.appendChild(stepPlannerScript);
-  
-  // Load checklist script
-  const checklistScript = document.createElement('script');
-  checklistScript.src = 'guided-checklist.js';
-  checklistScript.onload = () => {
-    if (typeof initDevelopmentChecklist === 'function') {
-      initDevelopmentChecklist(developerValue);
-    }
-  };
-  document.head.appendChild(checklistScript);
-  
-  // Load step-by-step planner CSS
-  const stepPlannerCSS = document.createElement('link');
-  stepPlannerCSS.rel = 'stylesheet';
-  stepPlannerCSS.href = 'step-by-step-planner.css';
-  document.head.appendChild(stepPlannerCSS);
   
   // Scroll to guide
   guideContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
