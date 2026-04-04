@@ -43,15 +43,25 @@ class FilmDevelopmentApp {
 
     init() {
         console.log('🎞️ Inicializando Desenrollalo v2.0...');
-        this.cacheElements();
-        console.log('✅ Elementos cacheados');
-        this.bindEvents();
-        console.log('✅ Eventos vinculados');
-        this.updateChemicalSystem();
-        this.updateRollsDisplay();
-        this.initializeSections();
-        console.log('✅ Secciones inicializadas');
-        console.log('✅ Aplicación lista para usar');
+        console.log('📍 Estado inicial:', this.state);
+        
+        try {
+            this.cacheElements();
+            console.log('✅ Elementos cacheados');
+            
+            this.bindEvents();
+            console.log('✅ Eventos vinculados');
+            
+            this.updateChemicalSystem();
+            this.updateRollsDisplay();
+            this.initializeSections();
+            console.log('✅ Secciones inicializadas');
+            
+            console.log('✅ Aplicación lista para usar');
+        } catch (error) {
+            console.error('❌ Error en init():', error);
+            console.error('Stack:', error.stack);
+        }
     }
 
     cacheElements() {
@@ -754,9 +764,9 @@ class FilmDevelopmentApp {
                         <div class="chemical-item">
                             <div class="chemical-name">Capacidad</div>
                             <div class="chemical-bar">
-                                <div class="chemical-fill" style="width: \${(this.calculateChemicalCapacity().developer / 12) * 100}%"></div>
+                                <div class="chemical-fill" style="width: ${(this.calculateChemicalCapacity().developer / 12) * 100}%"></div>
                             </div>
-                            <div class="chemical-remaining">\${this.calculateChemicalCapacity().developer} rollos restantes</div>
+                            <div class="chemical-remaining">${this.calculateChemicalCapacity().developer} rollos restantes</div>
                         </div>
                     </div>
                 </div>
@@ -810,7 +820,7 @@ class FilmDevelopmentApp {
                         <li>Verter developer rápidamente</li>
                         <li>Comenzar timer inmediatamente</li>
                         <li>Agitación: 1 minuto constante, luego cada 30s</li>
-                        <li>Tiempo: \${Math.floor(duration/60)} minutos exactos</li>
+                        <li>Tiempo: ${Math.floor(duration/60)} minutos exactos</li>
                         <li>Preparar stop bath mientras corre timer</li>
                     </ul>
                 </div>
