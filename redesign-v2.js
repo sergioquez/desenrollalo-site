@@ -1268,9 +1268,5 @@ class FilmDevelopmentApp {
     }
 }
 
-// Inicializar aplicación cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', () => {
-    window.filmDevelopmentApp = new FilmDevelopmentApp();
-    
-    console.log('🎞️ Desenrollalo v2.0 cargado exitosamente');
-});
+// Exportar la clase para uso global
+window.FilmDevelopmentApp = FilmDevelopmentApp;

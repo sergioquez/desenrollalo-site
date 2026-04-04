@@ -297,7 +297,6 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="redesign-v2.js" defer></script>
     <script>
         // Script crítico para carga inicial
         document.addEventListener('DOMContentLoaded', function() {
@@ -309,7 +308,22 @@
                 loading.classList.add('hidden');
                 app.style.display = 'block';
                 
-                // Remover completamente después de la animación
+                // Inicializar la aplicación AHORA, después de mostrar el contenedor
+                setTimeout(() => {
+                    // Cargar el script principal dinámicamente
+                    const script = document.createElement('script');
+                    script.src = 'redesign-v2.js';
+                    script.onload = function() {
+                        window.filmDevelopmentApp = new FilmDevelopmentApp();
+                        console.log('🎞️ Desenrollalo v2.0 cargado exitosamente');
+                    };
+                    script.onerror = function(err) {
+                        console.error('❌ Error cargando la aplicación:', err);
+                    };
+                    document.head.appendChild(script);
+                }, 100);
+                
+                // Remover pantalla de carga completamente después de la animación
                 setTimeout(() => {
                     loading.style.display = 'none';
                 }, 500);
